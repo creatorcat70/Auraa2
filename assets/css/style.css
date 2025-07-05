@@ -129,10 +129,10 @@ button:hover {
 
 .meteor-wrap {
   position: absolute;
-  transform: rotate(45deg);
-  animation: diagonalMove 4s linear infinite;
+  transform: rotate(45deg); /* Static diagonal rotation */
 }
 
+/* Meteor moves inside wrapper */
 .meteor {
   width: 2px;
   height: 40px;
@@ -140,43 +140,32 @@ button:hover {
   border-radius: 4px;
   filter: blur(0.5px);
   box-shadow: 0 0 6px #ff00ff;
+  animation: meteorFall 3s linear infinite;
 }
 
-/* Each meteor starts at a visible location */
-.meteor-wrap:nth-child(1) {
-  top: -40px;
-  left: 0;
-  animation-delay: 0s;
-}
-.meteor-wrap:nth-child(2) {
-  top: 100px;
-  left: 50px;
-  animation-delay: 1s;
-}
-.meteor-wrap:nth-child(3) {
-  top: 200px;
-  left: 100px;
-  animation-delay: 2s;
-}
-.meteor-wrap:nth-child(4) {
-  top: 300px;
-  left: 150px;
-  animation-delay: 1.5s;
-}
-.meteor-wrap:nth-child(5) {
-  top: 400px;
-  left: 200px;
-  animation-delay: 2.5s;
-}
+/* Unique positions and animation delays */
+.meteor-wrap:nth-child(1) { top: -50px; left: -50px; }
+.meteor-wrap:nth-child(2) { top: 100px; left: 0; }
+.meteor-wrap:nth-child(3) { top: 200px; left: 100px; }
+.meteor-wrap:nth-child(4) { top: 300px; left: 200px; }
+.meteor-wrap:nth-child(5) { top: 400px; left: 300px; }
 
-/* Movement is down, but rotation makes it diagonal */
-@keyframes diagonalMove {
+.meteor-wrap:nth-child(1) .meteor { animation-delay: 0s; }
+.meteor-wrap:nth-child(2) .meteor { animation-delay: 1s; }
+.meteor-wrap:nth-child(3) .meteor { animation-delay: 2s; }
+.meteor-wrap:nth-child(4) .meteor { animation-delay: 1.5s; }
+.meteor-wrap:nth-child(5) .meteor { animation-delay: 2.5s; }
+
+@keyframes meteorFall {
   0% {
-    transform: rotate(45deg) translateY(0);
+    transform: translateY(0);
     opacity: 1;
   }
   100% {
-    transform: rotate(45deg)
+    transform: translateY(150vh);
+    opacity: 0;
+  }
+}
 
 
 
