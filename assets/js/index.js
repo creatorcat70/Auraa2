@@ -1,5 +1,5 @@
   function runStealthMode() {
-    const title = "Google";
+    const title = "Calculator - Google Search";
     const icon = "https://www.google.com/favicon.ico";
     const src = window.location.href;
 
