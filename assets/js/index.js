@@ -39,22 +39,43 @@
     window.location.href = "https://www.ixl.com";
   }
 
-  window.onload = function () {
-    document.getElementById('loader').style.display = 'none';
-    document.getElementById('content').style.display = 'block';
+ window.onload = function () {
+  // Hide loader, show content
+  document.getElementById('loader').style.display = 'none';
+  document.getElementById('content').style.display = 'block';
 
-    const stealth = JSON.parse(localStorage.getItem("stealthModeEnabled")) || false;
-    const checkbox = document.getElementById("blankMode");
-    checkbox.checked = stealth;
+  // Stealth mode setup
+  const stealth = JSON.parse(localStorage.getItem("stealthModeEnabled")) || false;
+  const checkbox = document.getElementById("blankMode");
+  checkbox.checked = stealth;
 
-    if (stealth) runStealthMode();
+  if (stealth) runStealthMode();
 
-    checkbox.addEventListener("change", function () {
-      const isChecked = checkbox.checked;
-      localStorage.setItem("stealthModeEnabled", JSON.stringify(isChecked));
-      if (isChecked) runStealthMode();
-    });
-  };
+  checkbox.addEventListener("change", function () {
+    const isChecked = checkbox.checked;
+    localStorage.setItem("stealthModeEnabled", JSON.stringify(isChecked));
+    if (isChecked) runStealthMode();
+  });
+
+  // 🌠 Meteor spawner
+  function spawnMeteor() {
+    const zone = document.getElementById("meteorZone");
+    if (!zone) return;
+
+    zone.innerHTML = "";
+
+    const meteor = document.createElement("div");
+    meteor.className = "meteor";
+    meteor.style.left = Math.random() * window.innerWidth + "px";
+    meteor.style.top = "0px";
+
+    zone.appendChild(meteor);
+  }
+
+  spawnMeteor();
+  setInterval(spawnMeteor, 10000);
+};
+
 
   document.querySelectorAll('a').forEach(function (link) {
     link.addEventListener('click', function () {
