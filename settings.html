@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Auraa Settings</title>
+  <link rel="icon" type="image/png" href="icon.png" id="dynamicFavicon" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+    body {
+      margin: 0;
+      padding: 40px;
+      background: linear-gradient(135deg, #2a003f, #000000);
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      animation: flickerBackground 6s infinite ease-in-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    @keyframes flickerBackground {
+      0%, 100% { background: linear-gradient(135deg, #2a003f, #000000); }
+      10% { background: linear-gradient(135deg, #3c096c, #111111); }
+      20% { background: linear-gradient(135deg, #7b2cbf, #000); }
+      25% { background: linear-gradient(135deg, #9d4edd, #1a0033); }
+      30%, 90% { background: linear-gradient(135deg, #2a003f, #000000); }
+    }
+
+    .title {
+      font-size: 4rem;
+      font-weight: 700;
+      text-shadow: 0 0 10px #9d4edd, 0 0 20px #7b2cbf, 0 0 30px #ffffff;
+      margin-bottom: 1rem;
+    }
+
+    .dot {
+      color: #9d4edd;
+    }
+
+    label {
+      font-size: 1.2rem;
+      margin-top: 30px;
+      display: block;
+      text-align: left;
+      max-width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    select, input[type=number], button {
+      margin-top: 15px;
+      padding: 12px 25px;
+      border-radius: 25px;
+      border: none;
+      font-size: 1rem;
+      background: #7b2cbf;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 0 8px #9d4edd;
+      transition: 0.3s ease;
+      outline: none;
+      width: 300px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    select:hover, input[type=number]:hover, button:hover {
+      background: #9d4edd;
+    }
+
+    input[type="checkbox"] {
+      margin-right: 10px;
+      transform: scale(1.2);
+    }
+
+    .footer {
+      margin-top: auto;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+      text-shadow: 0 0 5px #c77dff;
+      padding-bottom: 20px;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <h1 class="title">Auraa<span class="dot"> Settings.</span></h1>
+
+  <label for="cloakSelect">Cloak tab as:</label>
+  <select id="cloakSelect">
+    <option value="default">Default - Auraa</option>
+    <option value="https://www.khanacademy.org/favicon.ico|Khan Academy">Khan Academy</option>
+    <option value="https://www.google.com/favicon.ico|Google Classroom">Google Classroom</option>
+    <option value="https://www.wikipedia.org/static/favicon/wikipedia.ico|Wikipedia">Wikipedia</option>
+    <option value="https://www.edmodo.com/favicon.ico|Edmodo">Edmodo</option>
+    <option value="https://cdn.jsdelivr.net/gh/FortAwesome/Font-Awesome@6/svgs/solid/book.svg|Scholarly">Scholarly</option>
+  </select>
+
+  <label for="particleCountInput" style="margin-top:40px;">Number of falling particles:</label>
+  <input
+    type="number"
+    id="particleCountInput"
+    min="0"
+    max="300"
+    step="1"
+    placeholder="Enter number (0-300)"
+  />
+
+  <label for="particleToggle" style="margin-top:40px;">
+    <input type="checkbox" id="particleToggle" checked /> Enable falling particles effect
+  </label>
+
+  <button id="saveBtn" style="margin-top:40px;">Save Settings</button>
+  <button onclick="window.location.href='index.html'" style="margin-top:20px;">Back to Homepage</button>
+
+  <p class="footer">Auraa Settings | Made by @thefakesydney</p>
+
+  <script>
+    const cloakSelect = document.getElementById('cloakSelect');
+    const particleCountInput = document.getElementById('particleCountInput');
+    const particleToggle = document.getElementById('particleToggle');
+    const saveBtn = document.getElementById('saveBtn');
+
+    function loadSettings() {
+      const cloak = localStorage.getItem('auraaCloak') || 'default';
+      cloakSelect.value = cloak;
+
+      const count = localStorage.getItem('auraaParticleCount') || '100';
+      particleCountInput.value = count;
+
+      // Particle toggle always starts enabled visually, but still saved
+      const enabled = localStorage.getItem('auraaParticlesEnabled');
+      particleToggle.checked = enabled !== 'false';
+    }
+
+    function saveSettings() {
+      localStorage.setItem('auraaCloak', cloakSelect.value);
+      localStorage.setItem('auraaParticleCount', particleCountInput.value);
+      localStorage.setItem('auraaParticlesEnabled', particleToggle.checked);
+      alert('Settings saved!');
+    }
+
+    saveBtn.addEventListener('click', saveSettings);
+
+    cloakSelect.addEventListener('change', () => {
+      if (cloakSelect.value === 'default') {
+        document.title = "Auraa Settings";
+        document.getElementById('dynamicFavicon').href = "icon.png";
+        return;
+      }
+      const [iconUrl, siteTitle] = cloakSelect.value.split('|');
+      document.title = siteTitle;
+      document.getElementById('dynamicFavicon').href = iconUrl;
+    });
+
+    loadSettings();
+  </script>
+
+  <script>
+    let animationFrameId = null;
+
+    function createParticles() {
+      if (document.getElementById('snowCanvas')) return;
+
+      const canvas = document.createElement('canvas');
+      canvas.id = 'snowCanvas';
+      Object.assign(canvas.style, {
+        position: 'fixed',
+        top: '0',
+        left: '0',
+        width: '100vw',
+        height: '100vh',
+        pointerEvents: 'none',
+        zIndex: '0'
+      });
+      document.body.prepend(canvas);
+
+      const ctx = canvas.getContext('2d');
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = window.innerHeight;
+
+      window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      });
+
+      const flakesCount = parseInt(localStorage.getItem('auraaParticleCount'), 10) || 100;
+      const flakes = Array.from({ length: flakesCount }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        radius: Math.random() * 1.5 + 0.5,
+        speedY: Math.random() * 0.5 + 0.2,
+        speedX: (Math.random() - 0.5) * 0.2
+      }));
+
+      function draw() {
+        ctx.clearRect(0, 0, width, height);
+        ctx.fillStyle = 'rgba(255,255,255,0.8)';
+        ctx.beginPath();
+        flakes.forEach(flake => {
+          ctx.moveTo(flake.x, flake.y);
+          ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+        });
+        ctx.fill();
+
+        flakes.forEach(flake => {
+          flake.y += flake.speedY;
+          flake.x += flake.speedX;
+
+          if (flake.y > height) {
+            flake.y = 0;
+            flake.x = Math.random() * width;
+          }
+          if (flake.x > width) flake.x = 0;
+          if (flake.x < 0) flake.x = width;
+        });
+
+        animationFrameId = requestAnimationFrame(draw);
+      }
+
+      draw();
+    }
+
+    function removeParticles() {
+      const canvas = document.getElementById('snowCanvas');
+      if (canvas) canvas.remove();
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      animationFrameId = null;
+    }
+
+    particleToggle.addEventListener('change', () => {
+      const enabled = particleToggle.checked;
+      localStorage.setItem('auraaParticlesEnabled', enabled);
+      if (enabled) {
+        createParticles();
+      } else {
+        removeParticles();
+      }
+    });
+
+    // ✅ Always start particles by default
+    createParticles();
+  </script>
+</body>
+</html>
