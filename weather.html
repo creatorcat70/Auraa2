@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Weather | Auraa</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    display: flex; flex-direction: column;
+    font-family: Arial, sans-serif;
+    background: #2a003f;
+    color: white;
+    height: 100vh;
+  }
+  .top-bar {
+    background: #3a005f;
+    padding: 1rem;
+  }
+  .top-bar button {
+    background: #9d4edd;
+    border: none; border-radius: 5px;
+    padding: 8px 16px; font-size: 1rem;
+    color: white; cursor: pointer;
+  }
+  .main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+  .left-panel, .right-panel {
+    padding: 2rem;
+    box-sizing: border-box;
+    overflow-y: auto;
+  }
+  .left-panel {
+    width: 45%;
+    border-right: 1px solid #555;
+  }
+  .right-panel {
+    width: 55%;
+  }
+  #weatherIcon {
+    font-size: 5rem;
+    margin: 1rem 0;
+  }
+  .info-line {
+    font-size: 1.2rem;
+    margin: .5rem 0;
+  }
+  #locationName {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: .5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  .weather-btn {
+    background: #7b2cbf;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: white;
+    cursor: pointer;
+    margin: 1rem 0;
+  }
+  .weather-btn:hover {
+    background: #9d4edd;
+  }
+  #message {
+    margin-top: .5rem;
+    color: #f0a;
+    font-weight: bold;
+  }
+  .calendar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+  .calendar-day {
+    padding: 1rem;
+    background: #4b0082;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.2s;
+    user-select: none;
+  }
+  .calendar-day.selected {
+    background: #7b2cbf;
+    box-shadow: 0 0 10px #9d4edd;
+  }
+  .calendar-day .day-label {
+    font-weight: 600;
+    margin-bottom: .5rem;
+  }
+  .calendar-day .temp-range {
+    font-size: .9rem;
+  }
+</style>
+</head>
+<body>
+  <div class="top-bar">
+    <button onclick="window.location.href='index.html'">← Back to Homepage</button>
+  </div>
+  <div class="main">
+    <div class="left-panel">
+      <h2>Weather Details</h2>
+      <div id="weatherIcon"></div>
+      <div id="tempNow" class="info-line"></div>
+      <div id="feelsLike" class="info-line"></div>
+      <div id="windSpeed" class="info-line"></div>
+      <div id="description" class="info-line"></div>
+      <div id="locationName"><span id="locationFlag"></span><span id="locationText"></span></div>
+      <button id="unitToggle" class="weather-btn">Switch to °F</button>
+      <div id="message">Waiting for location permission...</div>
+      <button id="retryBtn" class="weather-btn" style="display:none;">Retry</button>
+    </div>
+    <div class="right-panel">
+      <h2>16‑Day Calendar</h2>
+      <div class="calendar" id="calendar"></div>
+    </div>
+  </div>
+
+<script>
+let isFahrenheit = false;
+let forecast = [];
+const weatherIcon = document.getElementById('weatherIcon');
+const tempNowEl = document.getElementById('tempNow');
+const feelsLikeEl = document.getElementById('feelsLike');
+const windSpeedEl = document.getElementById('windSpeed');
+const descriptionEl = document.getElementById('description');
+const locationFlagEl = document.getElementById('locationFlag');
+const locationTextEl = document.getElementById('locationText');
+const messageEl = document.getElementById('message');
+const retryBtn = document.getElementById('retryBtn');
+const unitToggle = document.getElementById('unitToggle');
+
+function getIcon(code, hour) {
+  const night = hour < 6 || hour >= 19;
+  if ([0,1].includes(code)) return night ? '🌙' : '☀️';
+  if ([2,3].includes(code)) return '⛅';
+  if ([45,48].includes(code)) return '🌫️';
+  if ([51,53,55,56,57].includes(code)) return '🌧️';
+  if ([61,63,65,66,67,80,81,82].includes(code)) return '🌦️';
+  if ([71,73,75,77,85,86].includes(code)) return '❄️';
+  if ([95,96,99].includes(code)) return '⛈️';
+  return '❓';
+}
+
+function cToF(c) { return (c * 9/5 + 32); }
+function formatTemp(c) { return isFahrenheit ? `${cToF(c).toFixed(1)}°F` : `${c.toFixed(1)}°C`; }
+
+function selectDay(i) {
+  document.querySelectorAll('.calendar-day').forEach(el => el.classList.remove('selected'));
+  const el = document.querySelector(`.calendar-day[data-index='${i}']`);
+  if (el) el.classList.add('selected');
+  const d = forecast[i];
+  const dt = new Date(d.time);
+  weatherIcon.textContent = getIcon(d.codeCurrent, dt.getHours());
+  tempNowEl.textContent = `🌡️ Now: ${formatTemp(d.current)}`;
+  feelsLikeEl.textContent = `Feels like: ${formatTemp(d.current)}`;
+  windSpeedEl.textContent = d.wind ? `Wind: ${d.wind} m/s` : '';
+  descriptionEl.textContent = d.desc;
+  messageEl.textContent = `Showing Predicted Forecast for ${d.label}`;
+}
+
+unitToggle.onclick = () => {
+  isFahrenheit = !isFahrenheit;
+  unitToggle.textContent = isFahrenheit ? 'Switch to °C' : 'Switch to °F';
+  selectDay(parseInt(document.querySelector('.calendar-day.selected').dataset.index));
+};
+
+retryBtn.onclick = initWeather;
+
+async function initWeather() {
+  messageEl.textContent = 'Requesting location ...';
+  navigator.geolocation.getCurrentPosition(async pos => {
+    const lat = pos.coords.latitude, lon = pos.coords.longitude;
+    try {
+      const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&daily=temperature_2m_min,temperature_2m_max,weathercode&timezone=auto&wind_speed_unit=ms&forecast_days=16`);
+      const data = await res.json();
+      forecast = data.daily.time.map((time, i) => {
+        const baseTime = new Date(time + 'T12:00:00');
+        const min = data.daily.temperature_2m_min[i];
+        const max = data.daily.temperature_2m_max[i];
+        const current = i===0 ? data.current_weather.temperature : (min + max) / 2;
+        const codeCurrent = i===0 ? data.current_weather.weathercode : data.daily.weathercode[i];
+        const wind = i===0 ? data.current_weather.windspeed.toFixed(1) : '';
+        const label = i === 0 ? 'Today' : baseTime.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+        const desc = '';
+        return { time: time + 'T12:00:00', current, codeCurrent, wind, label, desc, min, max };
+      });
+      const cal = document.getElementById('calendar');
+      cal.innerHTML = '';
+      forecast.forEach((d,i) => {
+        const dayEl = document.createElement('div');
+        dayEl.className = 'calendar-day';
+        dayEl.dataset.index = i;
+        dayEl.innerHTML = `<div class="day-label">${d.label}</div>
+                           <div class="temp-range">${formatTemp(d.min)} • ${formatTemp(d.max)}</div>`;
+        dayEl.onclick = () => selectDay(i);
+        cal.appendChild(dayEl);
+      });
+      selectDay(0);
+      const loc = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`).then(r=>r.json());
+      const country = loc.address.country_code ? loc.address.country_code.toUpperCase() : '';
+      locationFlagEl.textContent = country ? String.fromCodePoint(...country.split('').map(c=>127397+c.charCodeAt())) : '';
+      locationTextEl.textContent = loc.address.city || loc.address.town || loc.address.state || loc.address.country;
+      retryBtn.style.display = 'none';
+    } catch {
+      messageEl.textContent = 'Error fetching weather; please try again.';
+      retryBtn.style.display = 'block';
+    }
+  }, () => {
+    messageEl.textContent = 'Location permission denied.';
+    retryBtn.style.display = 'block';
+  }, {timeout: 15000});
+}
+
+window.onload = initWeather;
+</script>
+</body>
+</html>
