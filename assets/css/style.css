@@ -116,6 +116,40 @@ button:hover {
 }
 
 /* Meteor Effect */
+.meteor-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.meteor {
+  position: absolute;
+  width: 2px;
+  height: 80px;
+  background: linear-gradient(to bottom, #c77dff, transparent);
+  border-radius: 4px;
+  filter: blur(1px);
+  transform: rotate(45deg);
+  animation: fall 2.5s linear forwards;
+}
+
+/* diagonal down-right animation */
+@keyframes fall {
+  0% {
+    transform: translate(0, 0) rotate(45deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(300px, 150vh) rotate(45deg); /* move right & down */
+    opacity: 0;
+  }
+}
+
 
 
 
