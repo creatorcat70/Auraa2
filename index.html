@@ -3,78 +3,502 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tide</title>
-  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <title>Auraa</title>
+  <link rel="icon" href="icon.png" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
-  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+    * { box-sizing: border-box; }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #2a003f, #000000);
+      color: white;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      position: fixed;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(35, 0, 55, 0.9);
+      padding: 10px 6px;
+      width: 50px;
+      border-radius: 10px;
+      box-shadow: 0 0 8px rgba(157, 78, 221, 0.9);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 10;
+    }
+    /* Meteor particles background */
+        .meteor {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: linear-gradient(45deg, #fff, #00d4ff);
+            border-radius: 50%;
+            box-shadow: 0 0 6px #00d4ff, 0 0 12px #00d4ff;
+            animation: meteor-fall linear infinite;
+        }
+
+    .sidebar button {
+      background: transparent;
+      border: none;
+      font-size: 1.6rem;
+      color: #fff;
+      margin: 8px 0;
+      cursor: pointer;
+      transition: 0.3s;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      user-select: none;
+    }
+
+    .sidebar button:hover {
+      color: #e0aaff;
+    }
+
+    .sidebar-info {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: white;
+      text-shadow: 0 0 5px #c77dff;
+      user-select: none;
+    }
+
+    #settingsBtn {
+      margin-top: auto;
+      margin-bottom: 5px;
+    }
+
+    #searchContainer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 30;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 20px 10px 70px;
+      background: rgba(50, 0, 80, 0.95);
+      box-shadow: 0 0 10px #9d4eddaa;
+    }
+
+    #urlInput {
+      flex-grow: 1;
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: none;
+      font-size: 1rem;
+      outline: none;
+      background: #2a003f;
+      color: white;
+      box-shadow: 0 0 6px #9d4edd88;
+      user-select: text;
+    }
+
+    #goBtn {
+      padding: 6px 20px;
+      background: #7b2cbf;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s;
+      user-select: none;
+    }
+
+    #goBtn:hover {
+      background: #9d4edd;
+    }
+
+    #tabBar {
+      display: flex;
+      background: rgba(35,0,55,0.9);
+      box-shadow: 0 0 8px rgba(157,78,221,0.9);
+      padding: 0 10px;
+      user-select: none;
+      height: 36px;
+      align-items: center;
+      gap: 5px;
+      position: fixed;
+      top: 45px;
+      left: 60px;
+      right: 0;
+      z-index: 25;
+    }
+
+    #tabBar button.tab {
+      background: transparent;
+      border: none;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 5px 5px 0 0;
+      cursor: pointer;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.3s;
+      font-size: 0.9rem;
+      user-select: none;
+    }
+
+    #tabBar button.tab.active {
+      background: #7b2cbf;
+      box-shadow: 0 -2px 5px #9d4edd;
+    }
+
+    #tabBar button.tab .closeBtn {
+      font-size: 0.7rem;
+      margin-left: 6px;
+      color: #ccc;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    #tabBar button.tab:hover .closeBtn {
+      color: white;
+    }
+
+    #tabBar button#addTabBtn {
+      font-size: 1.4rem;
+      font-weight: bold;
+      background: transparent;
+      border: none;
+      color: #9d4edd;
+      cursor: pointer;
+      margin-left: auto;
+      user-select: none;
+    }
+
+    .centerContainer {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -30%);
+      text-align: center;
+      width: 100%;
+      max-width: 700px;
+      padding: 0 20px;
+      z-index: 5;
+      user-select: none;
+    }
+
+    .titleBar {
+      font-size: 4rem;
+      font-weight: 700;
+      background: linear-gradient(45deg, #b48aff, #dbc8ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 2px #b48aff, 0 0 4px #caaaff;
+      margin-bottom: 20px;
+    }
+
+    #miniSearchContainer {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    #miniSearch, #cloakToggle, #miniBtn {
+      padding: 6px 16px;
+      border-radius: 20px;
+      border: none;
+      font-size: 1rem;
+      outline: none;
+      background: #2a003f;
+      color: white;
+      box-shadow: 0 0 6px #9d4edd88;
+      cursor: pointer;
+      transition: 0.3s;
+      user-select: text;
+    }
+
+    #cloakToggle:hover, #miniBtn:hover {
+      background: #9d4edd;
+    }
+
+    #iframeContainer {
+      position: fixed;
+      top: 80px;
+      left: 60px;
+      right: 0;
+      bottom: 0;
+      z-index: 1;
+    }
+
+    iframe.tabIframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: none;
+      border-radius: 0 0 10px 10px;
+      box-shadow: inset 0 0 20px #7b2cbf88;
+    }
+
+    iframe.tabIframe.active {
+      display: block;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Glowing footer */
+    #footer {
+      position: fixed;
+      bottom: 10px;
+      right: 20px;
+      color: white;
+      text-shadow: 0 0 6px #ffffffaa, 0 0 10px #ffffff88;
+      font-size: 0.95rem;
+      font-weight: bold;
+      z-index: 999;
+      user-select: none;
+    }
+  </style>
 </head>
 <body>
-  <div class="bubbles">
-    <div></div><div></div><div></div><div></div><div></div>
+
+  <div class="sidebar">
+    <button id="homeBtn" title="Home"><i class="bi bi-house"></i></button>
+    <button id="gamesBtn" title="Games"><i class="bi bi-joystick"></i></button>
+    <button id="moviesBtn" title="Movies"><i class="bi bi-film"></i></button>
+    <button id="chatBtn" title="Chat"><i class="bi bi-chat-dots"></i></button>
+    <button id="creditsBtn" title="Credits"><i class="bi bi-info-circle"></i></button>
+    <button id="weatherBtn" title="Weather"><i class="bi bi-cloud-sun"></i></button>
+    <button id="tideaiBtn" title="Tide AI ChatGPT"><img src="chatgpt-icon.png" alt="ChatGPT" style="width:20px;height:20px;filter: invert(1);"></button>
+    <button id="settingsBtn" title="Settings"><i class="bi bi-gear"></i></button>
+    <div class="sidebar-info">
+      <span id="battery">⚡</span>
+      <span id="time">⌚</span>
+    </div>
   </div>
 
-  <div id="mainContent">
-    <div id="loader" class="loader" style="display:none;">Loading...</div>
-
-    <div class="container" id="content">
-      <h1 class="title">Tide<span class="dot">.</span></h1>
-
-      <form id="searchForm">
-        <input type="text" id="urlInput" placeholder="Surf the Web..." autocomplete="off" />
-        <div class="options">
-          <label><input type="checkbox" id="blankMode" /> Stealth (about:blank)</label>
-        </div>
-        <button type="submit">Surf 🌊</button>
-      </form>
-    </div>
-
-    <div class="sidebar">
-      <button onclick="window.location.href='games.html';"><i class="bi bi-joystick"></i></button>
-      <button onclick="window.location.href='movies.html';"><i class="bi bi-film"></i></button>
-      <button onclick="window.location.href='tidechat.html';"><i class="bi bi-chat-dots"></i></button>
-      <button onclick="window.location.href='credits.html';"><i class="bi bi-info-circle"></i></button>
-      <div class="sidebar-info">
-        <span id="battery">⚡</span>
-        <span id="time">⌚</span>
-      </div>
-    </div>
-
-    <div class="footer">Tide | By Mizzery</div>
+  <div id="searchContainer">
+    <input type="text" id="urlInput" placeholder="Enter URL or search term..." autocomplete="off" />
+    <button id="goBtn">Go</button>
   </div>
 
-  <script src="/active/uv/uv.bundle.js" defer></script>
-  <script src="/active/uv/uv.config.js" defer></script>
-  <script src="/assets/js/register.js" defer></script>
-  <script src="/assets/js/index.js" defer></script>
+  <div id="tabBar">
+    <button id="addTabBtn">＋</button>
+  </div>
+
+  <div class="centerContainer" id="centerContainer">
+    <div class="titleBar">Auraa</div>
+    <div id="miniSearchContainer">
+      <input type="text" id="miniSearch" placeholder="Ask something..." autocomplete="off" />
+      <button id="miniBtn">Search</button>
+      <button id="cloakToggle">Cloak</button>
+    </div>
+  </div>
+
+  <div id="iframeContainer"></div>
+
+  <!-- Footer -->
+  <div id="footer">Auraa | v1.2 revised</div>
+
+  <script src="/active/uv/uv.bundle.js"></script>
+  <script src="/active/uv/uv.config.js"></script>
   <script>
-    // Removed password modal code completely
+    const tabBar = document.getElementById('tabBar');
+    const iframeContainer = document.getElementById('iframeContainer');
+    const urlInput = document.getElementById('urlInput');
+    const goBtn = document.getElementById('goBtn');
+    const addTabBtn = document.getElementById('addTabBtn');
+    const cloakBtn = document.getElementById('cloakToggle');
+    const miniBtn = document.getElementById('miniBtn');
+    const miniSearch = document.getElementById('miniSearch');
+    const centerContainer = document.getElementById('centerContainer');
+    const tideaiBtn = document.getElementById('tideaiBtn');
 
-    window.onload = function() {
-      // Show main content immediately
-      const loader = document.getElementById('loader');
-      const content = document.getElementById('content');
-      loader.style.display = 'none';
-      content.style.display = 'block';
+    let tabCount = 0;
+    let currentTabId = null;
 
-      // Battery status
-      if (navigator.getBattery) {
-        navigator.getBattery().then(battery => {
-          function updateBattery() {
-            document.getElementById("battery").textContent = `${Math.round(battery.level * 100)}% ⚡`;
-          }
-          updateBattery();
-          battery.addEventListener("levelchange", updateBattery);
-        });
+    function formatUrl(input) {
+      try {
+        const url = new URL(input);
+        return url.toString();
+      } catch {
+        try {
+          const url = new URL("https://" + input);
+          if (url.hostname.includes(".")) return url.toString();
+        } catch {}
+      }
+      return "https://www.startpage.com/search?q=" + encodeURIComponent(input);
+    }
+
+    function createTab(url = "") {
+      const tabId = `tab${tabCount++}`;
+      const tabButton = document.createElement('button');
+      tabButton.className = 'tab';
+      tabButton.innerHTML = `Tab ${tabCount} <span class="closeBtn">&times;</span>`;
+      tabButton.dataset.tab = tabId;
+
+      const iframe = document.createElement('iframe');
+      iframe.className = 'tabIframe';
+      iframe.dataset.tab = tabId;
+
+      if (url && typeof __uv$config !== "undefined") {
+        const encoded = __uv$config.encodeUrl(url);
+        iframe.src = __uv$config.prefix + encoded;
       }
 
-      // Time update every second
-      function updateTime() {
-        const now = new Date();
-        document.getElementById("time").textContent = now.toLocaleTimeString();
+      iframeContainer.appendChild(iframe);
+      tabBar.insertBefore(tabButton, addTabBtn);
+      setActiveTab(tabId);
+      updateAuraVisibility();
+
+      tabButton.addEventListener('click', (e) => {
+        if (e.target.classList.contains('closeBtn')) {
+          closeTab(tabId);
+        } else {
+          setActiveTab(tabId);
+        }
+      });
+    }
+
+    function setActiveTab(tabId) {
+      currentTabId = tabId;
+      document.querySelectorAll('.tab').forEach(btn =>
+        btn.classList.toggle('active', btn.dataset.tab === tabId)
+      );
+      document.querySelectorAll('.tabIframe').forEach(iframe =>
+        iframe.classList.toggle('active', iframe.dataset.tab === tabId)
+      );
+      updateAuraVisibility();
+    }
+
+    function closeTab(tabId) {
+      const tabBtn = document.querySelector(`.tab[data-tab="${tabId}"]`);
+      const iframe = document.querySelector(`.tabIframe[data-tab="${tabId}"]`);
+      if (tabBtn) tabBtn.remove();
+      if (iframe) iframe.remove();
+      if (currentTabId === tabId) {
+        const remaining = document.querySelectorAll('.tab');
+        if (remaining.length > 0) setActiveTab(remaining[0].dataset.tab);
+        else {
+          currentTabId = null;
+          updateAuraVisibility();
+        }
+      } else {
+        updateAuraVisibility();
       }
-      setInterval(updateTime, 1000);
-      updateTime();
+    }
+
+    function updateAuraVisibility() {
+      const tabs = document.querySelectorAll('.tab');
+      if (tabs.length === 0) {
+        centerContainer.classList.remove('hidden');
+      } else {
+        centerContainer.classList.add('hidden');
+      }
+    }
+
+    goBtn.addEventListener("click", () => {
+      const input = urlInput.value.trim();
+      if (!input) return;
+      const url = formatUrl(input);
+      if (!currentTabId) {
+        createTab(url);
+      } else {
+        const iframe = document.querySelector(`.tabIframe[data-tab="${currentTabId}"]`);
+        iframe.src = __uv$config.prefix + __uv$config.encodeUrl(url);
+        centerContainer.classList.add("hidden");
+      }
+    });
+
+    urlInput.addEventListener("keydown", e => {
+      if (e.key === "Enter") goBtn.click();
+    });
+
+    addTabBtn.addEventListener("click", () => {
+      createTab();
+    });
+
+    miniBtn.addEventListener("click", () => {
+      const query = miniSearch.value.trim();
+      if (query) {
+        const proxied = __uv$config.prefix + __uv$config.encodeUrl(`https://www.startpage.com/search?q=${encodeURIComponent(query)}`);
+        createTab(`https://www.startpage.com/search?q=${encodeURIComponent(query)}`);
+      }
+    });
+
+    miniSearch.addEventListener("keydown", e => {
+      if (e.key === "Enter") miniBtn.click();
+    });
+
+    cloakBtn.addEventListener("click", () => {
+      const popup = window.open("about:blank", "_blank");
+      if (!popup || popup.closed) {
+        alert("Popup blocked. Please allow popups.");
+        return;
+      }
+      popup.document.write(`
+    <html>
+      <head>
+        <title>IXL | Math, Language Arts, Science, Social Studies, Spanish</title>
+        <link rel="icon" href="icon.png">
+        <link rel="icon" type="image/png" href="ixlicon.png">
+        <style>html,body{margin:0;height:100%;overflow:hidden;}iframe{width:100%;height:100%;border:none;}</style>
+      </head>
+      <body>
+        <iframe src="${location.href}"></iframe>
+      </body>
+    </html>
+  `);
+      popup.document.close();
+      location.href = "https://www.google.com";
+    });
+
+    tideaiBtn.addEventListener('click', () => {
+      window.location.href = 'tideai.html';
+    });
+
+    const nav = {
+      homeBtn: "index.html",
+      gamesBtn: "games.html",
+      moviesBtn: "movies.html",
+      chatBtn: "auraachat.html",
+      creditsBtn: "credits.html",
+      settingsBtn: "settings.html",
+      weatherBtn: "weather.html"
     };
+    for (const id in nav) {
+      const btn = document.getElementById(id);
+      if (btn) btn.onclick = () => window.location.href = nav[id];
+    }
+
+    if (navigator.getBattery) {
+      navigator.getBattery().then(battery => {
+        const el = document.getElementById("battery");
+        function update() {
+          el.textContent = `⚡ ${Math.round(battery.level * 100)}%`;
+        }
+        update();
+        battery.addEventListener("levelchange", update);
+      });
+    }
+
+    setInterval(() => {
+      const el = document.getElementById("time");
+      el.textContent = "⌚ " + new Date().toLocaleTimeString();
+    }, 1000);
+
+    updateAuraVisibility();
   </script>
 </body>
 </html>
