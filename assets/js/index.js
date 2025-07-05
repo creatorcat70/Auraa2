@@ -1,78 +1,103 @@
-const tabBar = document.getElementById("tabBar");
-const iframeContainer = document.getElementById("iframeContainer");
-const urlInput = document.getElementById("urlInput");
-const searchForm = document.getElementById("searchForm");
-const addTabBtn = document.getElementById("addTabBtn");
+  function runStealthMode() {
+    const title = "Google";
+    const icon = "https://www.google.com/favicon.ico";
+    const src = window.location.href;
 
-let tabCount = 0;
-let currentTabId = null;
+    const popup = window.open("about:blank", "_blank");
 
-function formatUrl(input) {
-  input = input.trim();
-  if (!input) return "https://google.com";
-  const fullUrl = input.startsWith("http") ? input : "https://" + input;
-  if (typeof __uv$config !== "undefined") {
-    const encoded = __uv$config.encodeUrl(fullUrl);
-    return __uv$config.prefix + encoded;
-  } else {
-    console.warn("[UV] __uv$config is not loaded.");
-    return fullUrl;
-  }
-}
-
-function createTab(url = "https://google.com") {
-  const tabId = "tab" + tabCount++;
-  const tabBtn = document.createElement("button");
-  tabBtn.className = "tab";
-  tabBtn.dataset.tab = tabId;
-  tabBtn.textContent = "Tab " + tabCount;
-  tabBar.insertBefore(tabBtn, addTabBtn);
-
-  const iframe = document.createElement("iframe");
-  iframe.dataset.tab = tabId;
-  iframe.src = formatUrl(url);
-  iframe.className = "active";
-  iframeContainer.appendChild(iframe);
-
-  tabBtn.addEventListener("click", () => setActiveTab(tabId));
-  setActiveTab(tabId);
-}
-
-function setActiveTab(tabId) {
-  currentTabId = tabId;
-  document.querySelectorAll(".tab").forEach(tab => {
-    tab.classList.toggle("active", tab.dataset.tab === tabId);
-  });
-  document.querySelectorAll("iframe").forEach(frame => {
-    frame.classList.toggle("active", frame.dataset.tab === tabId);
-  });
-  const iframe = document.querySelector(`iframe[data-tab="${tabId}"]`);
-  if (iframe) {
-    const url = iframe.src.replace(__uv$config?.prefix || "", "");
-    urlInput.value = decodeURIComponent(url);
-  }
-}
-
-if (addTabBtn) {
-  addTabBtn.addEventListener("click", () => createTab());
-}
-
-if (searchForm) {
-  searchForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-    const input = urlInput.value.trim();
-    if (!input) return;
-
-    if (!currentTabId) {
-      createTab(input);
-    } else {
-      const iframe = document.querySelector(`iframe[data-tab="${currentTabId}"]`);
-      if (iframe) iframe.src = formatUrl(input);
+    if (!popup || popup.closed) {
+      alert("Popup blocked. Please allow popups for stealth mode to work.");
+      return;
     }
-  });
-}
 
-window.addEventListener("load", () => {
-  console.log("[Auraa] Loaded. Creating default tab.");
-  createTab();
-});
+    popup.document.write(`
+      <html>
+        <head>
+          <title>${title}</title>
+          <link rel="icon" href="${icon}">
+          <style>
+            html, body {
+              margin: 0;
+              padding: 0;
+              height: 100%;
+              overflow: hidden;
+            }
+            iframe {
+              width: 100%;
+              height: 100%;
+              border: none;
+            }
+          </style>
+        </head>
+        <body>
+          <iframe src="${src}"></iframe>
+        </body>
+      </html>
+    `);
+    popup.document.close();
+
+    window.location.href = "https://www.google.com";
+  }
+
+  window.onload = function () {
+    document.getElementById('loader').style.display = 'none';
+    document.getElementById('content').style.display = 'block';
+
+    const stealth = JSON.parse(localStorage.getItem("stealthModeEnabled")) || false;
+    const checkbox = document.getElementById("blankMode");
+    checkbox.checked = stealth;
+
+    if (stealth) runStealthMode();
+
+    checkbox.addEventListener("change", function () {
+      const isChecked = checkbox.checked;
+      localStorage.setItem("stealthModeEnabled", JSON.stringify(isChecked));
+      if (isChecked) runStealthMode();
+    });
+  };
+
+  document.querySelectorAll('a').forEach(function (link) {
+    link.addEventListener('click', function () {
+      var gameName = link.textContent;
+      console.log("Loading " + gameName + "...");
+
+      document.getElementById('loader').style.display = 'block';
+      document.getElementById('content').style.display = 'none';
+
+      var iframe = document.getElementById('gameFrame');
+      if (iframe) {
+        iframe.onload = function () {
+          document.getElementById('loader').style.display = 'none';
+          document.getElementById('content').style.display = 'block';
+        };
+      }
+    });
+  });
+
+  document.getElementById('searchForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    let query = document.getElementById('urlInput').value.trim();
+    if (!query) return;
+
+    const rawUrl = generateSearchUrl(query);
+    const encoded = __uv$config.encodeUrl(rawUrl);
+    const proxyUrl = __uv$config.prefix + encoded;
+
+    document.getElementById('loader').style.display = 'block';
+    document.getElementById('content').style.display = 'none';
+
+    window.location.href = proxyUrl;
+  });
+
+  function generateSearchUrl(query) {
+    try {
+      const url = new URL(query);
+      return url.toString();
+    } catch {
+      try {
+        const url = new URL(`https://${query}`);
+        if (url.hostname.includes('.')) return url.toString();
+      } catch {}
+    }
+    return `https://duckduckgo.com/search?q=${encodeURIComponent(query)}&source=web`;
+  }
