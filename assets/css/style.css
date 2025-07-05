@@ -134,8 +134,8 @@ button:hover {
   background: linear-gradient(to bottom, #c77dff, transparent);
   border-radius: 4px;
   filter: blur(1px);
-  transform: rotate(45deg);
-  animation: fall 2s linear forwards;
+  transform: rotate(45deg); /* Diagonal appearance */
+  animation: fall 3s linear forwards;
 }
 
 @keyframes fall {
@@ -144,11 +144,10 @@ button:hover {
     opacity: 1;
   }
   100% {
-    transform: translate(100vw, 100vh) rotate(45deg);
+    transform: translate(200px, 200vh) rotate(45deg); /* diagonal fall */
     opacity: 0;
   }
 }
-
 
 
 @keyframes wave {
