@@ -3,7 +3,7 @@
 body {
   margin: 0;
   padding: 0;
-  background: radial-gradient(ellipse at center, #002c4a 0%, #000914 100%);
+  background: radial-gradient(ellipse at center, #3a005f 0%, #000000 100%);
   background-size: 200% 200%;
   animation: waterPulse 8s ease-in-out infinite;
   color: #fff;
@@ -23,12 +23,12 @@ body {
 .title {
   font-size: 4rem;
   font-weight: 700;
-  text-shadow: 0 0 10px #00ffe7, 0 0 20px #00d4ff, 0 0 30px #0088ff;
+  text-shadow: 0 0 10px #ff00ff, 0 0 20px #cc00ff, 0 0 30px #9900ff;
 }
 
 .dot {
-  color: #00ffe7;
-  text-shadow: 0 0 8px #00ffe7;
+  color: #ff00ff;
+  text-shadow: 0 0 8px #ff00ff;
 }
 
 .sidebar {
@@ -36,11 +36,11 @@ body {
   left: 10px;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0, 25, 40, 0.85);
+  background: rgba(30, 0, 50, 0.85);
   padding: 10px;
   width: 60px;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+  box-shadow: 0 0 10px rgba(255, 0, 255, 0.4);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -54,19 +54,19 @@ body {
   margin: 10px 0;
   cursor: pointer;
   transition: 0.3s;
-  text-shadow: 0 0 8px #00ffe7;
+  text-shadow: 0 0 8px #ff00ff;
 }
 
 .sidebar button:hover {
-  color: #00bfff;
-  text-shadow: 0 0 10px #00ffe7;
+  color: #e200ff;
+  text-shadow: 0 0 10px #ff00ff;
 }
 
 .sidebar-info {
   margin-top: 10px;
   font-size: 1rem;
   color: white;
-  text-shadow: 0 0 5px #00d4ff;
+  text-shadow: 0 0 5px #cc00ff;
 }
 
 input[type="text"] {
@@ -74,17 +74,17 @@ input[type="text"] {
   width: 300px;
   border: none;
   border-radius: 25px;
-  background: rgba(25, 35, 45, 0.85);
+  background: rgba(50, 0, 75, 0.85);
   color: white;
   font-size: 1rem;
   outline: none;
   transition: 0.3s;
-  box-shadow: 0 0 8px rgba(0, 255, 255, 0.4);
+  box-shadow: 0 0 8px rgba(255, 0, 255, 0.4);
 }
 
 input[type="text"]:focus {
-  background: rgba(35, 45, 55, 0.95);
-  box-shadow: 0 0 12px rgba(0, 255, 255, 0.8);
+  background: rgba(60, 0, 90, 0.95);
+  box-shadow: 0 0 12px rgba(255, 0, 255, 0.8);
 }
 
 button {
@@ -93,16 +93,17 @@ button {
   font-size: 1rem;
   border: none;
   border-radius: 25px;
-  background: linear-gradient(135deg, #00d4ff, #0074ff);
+  background: linear-gradient(135deg, #9900ff, #ff00ff);
   color: white;
   cursor: pointer;
   transition: 0.3s;
   animation: wave 3s infinite;
+  box-shadow: 0 0 10px #ff00ff;
 }
 
 button:hover {
-  background: linear-gradient(135deg, #0088ff, #00ffe7);
-  box-shadow: 0 0 10px #00ffe7;
+  background: linear-gradient(135deg, #cc00ff, #ff66ff);
+  box-shadow: 0 0 12px #ff66ff;
 }
 
 .footer {
@@ -111,7 +112,7 @@ button:hover {
   right: 15px;
   font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.8);
-  text-shadow: 0 0 5px #00d4ff;
+  text-shadow: 0 0 5px #cc00ff;
 }
 
 .bubbles {
@@ -126,7 +127,7 @@ button:hover {
   position: absolute;
   bottom: -100px;
   width: 20px; height: 20px;
-  background: rgba(0, 255, 255, 0.2);
+  background: rgba(255, 0, 255, 0.2);
   border-radius: 50%;
   animation: rise 10s infinite ease-in;
 }
