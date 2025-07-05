@@ -129,7 +129,7 @@ button:hover {
 
 .meteor-wrap {
   position: absolute;
-  transform: rotate(45deg); /* Static diagonal rotation */
+  transform: rotate(-45deg); /* Static diagonal rotation */
 }
 
 /* Meteor moves inside wrapper */
