@@ -127,60 +127,56 @@ button:hover {
   z-index: 0;
 }
 
-/* Rotate wrapper to change movement direction */
 .meteor-wrap {
   position: absolute;
-  transform: rotate(45deg); /* direction of meteor movement */
+  transform: rotate(45deg);
   animation: diagonalMove 4s linear infinite;
 }
 
-/* Actual meteor trail */
 .meteor {
   width: 2px;
   height: 40px;
   background: linear-gradient(to bottom, #ff00ff, transparent);
-  border-radius: 2px;
+  border-radius: 4px;
   filter: blur(0.5px);
   box-shadow: 0 0 6px #ff00ff;
 }
 
+/* Each meteor starts at a visible location */
 .meteor-wrap:nth-child(1) {
-  top: -50px;
-  left: -100px;
+  top: -40px;
+  left: 0;
   animation-delay: 0s;
 }
 .meteor-wrap:nth-child(2) {
   top: 100px;
-  left: -150px;
+  left: 50px;
   animation-delay: 1s;
 }
 .meteor-wrap:nth-child(3) {
-  top: 300px;
-  left: -200px;
+  top: 200px;
+  left: 100px;
   animation-delay: 2s;
 }
 .meteor-wrap:nth-child(4) {
-  top: 500px;
-  left: -250px;
+  top: 300px;
+  left: 150px;
   animation-delay: 1.5s;
 }
 .meteor-wrap:nth-child(5) {
-  top: 700px;
-  left: -300px;
+  top: 400px;
+  left: 200px;
   animation-delay: 2.5s;
 }
 
-/* Straight down, but due to rotation, appears diagonal */
+/* Movement is down, but rotation makes it diagonal */
 @keyframes diagonalMove {
   0% {
     transform: rotate(45deg) translateY(0);
     opacity: 1;
   }
   100% {
-    transform: rotate(45deg) translateY(150vh);
-    opacity: 0;
-  }
-}
+    transform: rotate(45deg)
 
 
 
