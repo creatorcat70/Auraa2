@@ -2,76 +2,129 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tide Movies</title>
-  <link rel="stylesheet" href="/assets/css/style.css" />
-
-  <!-- UV Static Scripts -->
-  <script src="/active/uv/uv.bundle.js"></script>
-  <script src="/active/uv/uv.config.js"></script>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Auraa Movies</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <style>
-    .iframe-container {
-      width: 100%;
-      height: calc(100vh - 100px);
-      margin-top: 20px;
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #2a003f, #000000);
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      height: 100vh;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #9d4edd, #7b2cbf, #c77dff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .dot {
+      color: #9d4edd;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-top: 40px;
+      text-align: center;
+      text-shadow: 0 0 10px #9d4edd, 0 0 20px #7b2cbf, 0 0 30px #ffffff;
+    }
+
+    .iframe-container {
+      width: 90%;
+      height: 75%;
+      margin-top: 20px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(157, 78, 221, 0.6);
+      position: relative;
     }
 
     iframe {
-      width: 90%;
+      width: 100%;
       height: 100%;
       border: none;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(166, 74, 255, 0.3);
     }
 
-    .top-bar {
-      text-align: center;
-      margin-top: 20px;
-      animation: fadeIn 1.5s ease;
-    }
-
-    .back-btn {
+    .back-button {
       position: absolute;
       top: 20px;
       left: 20px;
-      background: #a64aff;
-      color: #000;
-      font-weight: 600;
-      padding: 10px 25px;
-      border-radius: 20px;
+      background: #7b2cbf;
+      color: white;
       border: none;
+      border-radius: 25px;
+      padding: 10px 20px;
+      font-size: 1rem;
       cursor: pointer;
-      font-size: 0.95rem;
       transition: 0.3s;
       z-index: 10;
     }
 
-    .back-btn:hover {
-      background: #d197ff;
+    .back-button:hover {
+      background: #9d4edd;
+    }
+
+    #loadingMsg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.3rem;
+      color: #c77dff;
+      z-index: 5;
+      pointer-events: none;
+      text-align: center;
     }
   </style>
+
+  <!-- UV scripts -->
+  <script src="/uv/uv.config.js"></script>
+  <script src="/uv/uv.bundle.js"></script>
 </head>
 <body>
-  <button class="back-btn" onclick="window.location.href='index.html'">← Back to Tide</button>
+  <button class="back-button" onclick="window.location.href='index.html'">← Back</button>
 
-  <div class="top-bar">
-    <h1 class="title">Tide<span class="dot">Movies</span></h1>
-  </div>
+  <h1 class="gradient-text">Auraa<span class="dot">Movies</span></h1>
 
   <div class="iframe-container">
+    <div id="loadingMsg">Loading movies...</div>
     <iframe id="movieFrame" allowfullscreen></iframe>
   </div>
 
   <script>
-    // Encode the movie URL using UV
-    const url = "https://movies.waves.lat/";
-    const encoded = __uv$config.encodeUrl(url);
-    const proxyUrl = __uv$config.prefix + encoded;
+    function waitForUV(retries = 20) {
+      if (typeof __uv$config !== 'undefined' && typeof __uv$config.encodeUrl === 'function') {
+        const url = "https://movies.waves.lat/";
+        const encoded = __uv$config.encodeUrl(url);
+        document.getElementById("movieFrame").src = __uv$config.prefix + encoded;
+        document.getElementById("loadingMsg").style.display = 'none';
+      } else if (retries > 0) {
+        setTimeout(() => waitForUV(retries - 1), 200);
+      } else {
+        document.getElementById("loadingMsg").innerText = "⚠️ Failed to load proxy. Check UV setup.";
+      }
+    }
 
-    document.getElementById("movieFrame").src = proxyUrl;
+    window.addEventListener('DOMContentLoaded', () => {
+      waitForUV();
+    });
   </script>
 </body>
 </html>
