@@ -129,22 +129,34 @@ button:hover {
 
 .meteor-wrap {
   position: absolute;
-  transform: rotate(-45deg); /* All meteors angled to bottom-right */
+  transform: rotate(-45deg); /* All move diagonally ⤵️ */
 }
 
-/* Glowing meteor trail */
+/* Meteor trail */
 .meteor {
   width: 2px;
   height: 40px;
   background: linear-gradient(to bottom, #ff00ff, transparent);
   border-radius: 4px;
-  filter: blur(0.5px);
+  filter: blur(1px);
   box-shadow: 0 0 6px #ff00ff;
   animation: meteorFall 3s linear infinite;
   animation-delay: 0s;
 }
 
-/* All meteors move down inside rotated wrapper */
+/* Spawn meteors from the far left edge at different vertical positions */
+.meteor-wrap:nth-child(1) { top: 0vh; left: -30px; }
+.meteor-wrap:nth-child(2) { top: 10vh; left: -30px; }
+.meteor-wrap:nth-child(3) { top: 20vh; left: -30px; }
+.meteor-wrap:nth-child(4) { top: 30vh; left: -30px; }
+.meteor-wrap:nth-child(5) { top: 40vh; left: -30px; }
+.meteor-wrap:nth-child(6) { top: 50vh; left: -30px; }
+.meteor-wrap:nth-child(7) { top: 60vh; left: -30px; }
+.meteor-wrap:nth-child(8) { top: 70vh; left: -30px; }
+.meteor-wrap:nth-child(9) { top: 80vh; left: -30px; }
+.meteor-wrap:nth-child(10) { top: 90vh; left: -30px; }
+
+/* Animation */
 @keyframes meteorFall {
   0% {
     transform: translateY(0);
@@ -155,22 +167,6 @@ button:hover {
     opacity: 0;
   }
 }
-
-/* Top-left and top-right launches */
-.meteor-wrap:nth-child(1) { top: -60px; left: -60px; }
-.meteor-wrap:nth-child(2) { top: 0px; left: 10vw; }
-.meteor-wrap:nth-child(3) { top: 20px; left: 20vw; }
-.meteor-wrap:nth-child(4) { top: 40px; left: 30vw; }
-.meteor-wrap:nth-child(5) { top: -30px; left: 40vw; }
-
-.meteor-wrap:nth-child(6) { top: 0px; left: 50vw; }
-.meteor-wrap:nth-child(7) { top: -40px; left: 60vw; }
-.meteor-wrap:nth-child(8) { top: 30px; left: 70vw; }
-.meteor-wrap:nth-child(9) { top: -50px; left: 80vw; }
-.meteor-wrap:nth-child(10) { top: 10px; left: 90vw; }
-
-
-
 
 
 @keyframes wave {
