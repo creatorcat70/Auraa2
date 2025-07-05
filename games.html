@@ -1,39 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Tide - Games</title>
-    <link rel="stylesheet" href="/assets/css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Auraa - Games</title>
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <style>
+    /* Optional: Fallback purple theme if CSS doesn't load */
+    body {
+      background-color: #1a001f;
+      color: #e0d6ff;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      text-align: center;
+    }
+
+    .title {
+      font-size: 2.5rem;
+      color: #b388ff;
+      margin-bottom: 2rem;
+    }
+
+    .game-btn {
+      background-color: #6a1b9a;
+      color: white;
+      padding: 15px 30px;
+      margin: 10px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .game-btn:hover {
+      background-color: #8e24aa;
+    }
+
+    .back-btn {
+      margin-top: 30px;
+      background-color: #4527a0;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background-color: #5e35b1;
+    }
+
+    .footer {
+      margin-top: 60px;
+      font-size: 0.9rem;
+      color: #aaaaaa;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1 class="title">Tide Games</h1>
-        <div id="game-options">
-            <button class="game-btn" onclick="openGame('/games/cookie-clicker.html')">Cookie Clicker</button>
-            <button class="game-btn" onclick="openGame('/games/tomb-of-the-mask.html')">Tomb of the Mask</button>
-            <button class="game-btn" onclick="openGame('/games/timeshooter2.html')">Time Shooter 2</button>
-            <button class="game-btn" onclick="openGame('/games/ovo.html')">OvO</button>
-            <button class="game-btn" onclick="openGame('/games/1v1lol/index.html')">1v1.LoL</button>
-            <button class="game-btn" onclick="openGame('/games/chromedino.html')">Offline Dino Game</button>
-            <button class="game-btn" onclick="openGame('/games/wordle.html')">Wordle for Tide</button>
-            <button class="game-btn" onclick="openGame('/games/geometrydash.html')">Geometry Dash</button>
-            <button class="game-btn" onclick="openGame('/games/slope.html')">Slope for Tide</button>
-        </div>
-
-        <button class="back-btn" onclick="goBackToTide()">Back to Tide</button>
+  <div class="container">
+    <h1 class="title">Auraa Games</h1>
+    <div id="game-options">
+      <button class="game-btn" onclick="openGame('/games/cookie-clicker.html')">Cookie Clicker</button>
+      <button class="game-btn" onclick="openGame('/games/tomb-of-the-mask.html')">Tomb of the Mask</button>
+      <button class="game-btn" onclick="openGame('/games/timeshooter2.html')">Time Shooter 2</button>
+      <button class="game-btn" onclick="openGame('/games/ovo.html')">OvO</button>
+      <button class="game-btn" onclick="openGame('/games/1v1lol/index.html')">1v1.LoL</button>
+      <button class="game-btn" onclick="openGame('/games/chromedino.html')">Offline Dino Game</button>
+      <button class="game-btn" onclick="openGame('/games/wordle.html')">Wordle for Auraa</button>
+      <button class="game-btn" onclick="openGame('/games/geometrydash.html')">Geometry Dash</button>
+      <button class="game-btn" onclick="openGame('/games/slope.html')">Slope for Auraa</button>
     </div>
 
-    <div class="footer">Tide | By Mizzery</div>
+    <button class="back-btn" onclick="goBackToAuraa()">Back to Auraa</button>
+  </div>
 
-    <script>
-        function openGame(gameFile) {
-            window.open(gameFile, '_blank');
-        }
+  <div class="footer">Auraa | Original site made by Mizzery</div>
 
-        function goBackToTide() {
-            window.location.href = 'index.html';
-        }
-    </script>
+  <script>
+    function openGame(gameFile) {
+      window.open(gameFile, '_blank');
+    }
+
+    function goBackToAuraa() {
+      window.location.href = 'index.html';
+    }
+  </script>
 </body>
 </html>
