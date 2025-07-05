@@ -36,7 +36,7 @@
     `);
     popup.document.close();
 
-    window.location.href = "https://www.google.com";
+    window.location.href = "https://www.ixl.com";
   }
 
   window.onload = function () {
