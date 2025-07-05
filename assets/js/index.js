@@ -6,7 +6,7 @@
     const popup = window.open("about:blank", "_blank");
 
     if (!popup || popup.closed) {
-      alert("Popup blocked. Please allow popups for stealth mode to work.");
+      alert("Popup blocked. Please allow popups for Cloaking to work.");
       return;
     }
 
