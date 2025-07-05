@@ -122,17 +122,17 @@ button:hover {
   left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none;
+  pointer-events: none;     /* Don't interfere with UI */
   overflow: hidden;
-  z-index: 0;
+  z-index: -1;              /* Behind everything else */
 }
 
 .meteor-wrap {
   position: absolute;
-  transform: rotate(-45deg); /* All move diagonally ⤵️ */
+  transform: rotate(-45deg); /* Same direction */
 }
 
-/* Meteor trail */
+/* Visual trail */
 .meteor {
   width: 2px;
   height: 40px;
@@ -144,7 +144,7 @@ button:hover {
   animation-delay: 0s;
 }
 
-/* Spawn meteors from the far left edge at different vertical positions */
+/* Meteors all start from far left */
 .meteor-wrap:nth-child(1) { top: 0vh; left: -30px; }
 .meteor-wrap:nth-child(2) { top: 10vh; left: -30px; }
 .meteor-wrap:nth-child(3) { top: 20vh; left: -30px; }
@@ -156,7 +156,7 @@ button:hover {
 .meteor-wrap:nth-child(9) { top: 80vh; left: -30px; }
 .meteor-wrap:nth-child(10) { top: 90vh; left: -30px; }
 
-/* Animation */
+/* Falling motion */
 @keyframes meteorFall {
   0% {
     transform: translateY(0);
