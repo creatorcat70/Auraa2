@@ -3,64 +3,196 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title> IXL | Math, Language Arts, Science, Social Studies, and Spanish </title>
+  <title>Auraa</title>
   <link rel="icon" type="image/x-icon" href="ixlicon.png" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
-  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #1b0030, #000000);
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      overflow: hidden;
+    }
+
+    .browser-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background-color: #1c1c2e;
+      padding: 8px 15px;
+      border-radius: 8px;
+      margin: 12px;
+      color: white;
+    }
+
+    .browser-bar button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .browser-bar input {
+      flex: 1;
+      background-color: #2c2c3e;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 12px;
+      color: white;
+      font-family: monospace;
+    }
+
+    .sidebar {
+      position: absolute;
+      top: 70px;
+      left: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 999;
+    }
+
+    .sidebar button {
+      background-color: #2e004f;
+      border: none;
+      border-radius: 12px;
+      padding: 10px;
+      color: white;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background 0.2s;
+    }
+
+    .sidebar button:hover {
+      background-color: #510080;
+    }
+
+    .sidebar-info {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #bbb;
+      text-align: center;
+    }
+
+    .container {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    iframe {
+      width: 100%;
+      height: calc(100vh - 120px);
+      border: none;
+      display: none;
+    }
+
+    .footer {
+      position: fixed;
+      bottom: 5px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+      color: #888;
+    }
+
+    #urlInput, #browserInput {
+      background-color: #2c2c3e;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 15px;
+      width: 300px;
+    }
+
+    .options {
+      margin-top: 10px;
+      color: #aaa;
+    }
+
+    .title {
+      font-size: 36px;
+      margin-top: 20px;
+    }
+
+    .dot {
+      color: #b583ff;
+    }
+
+    button[type="submit"] {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #6a00ff;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #9500ff;
+    }
+
+  </style>
 </head>
 <body>
-  <div class="bubbles">
-  <div class="meteor-wrap"><div class="meteor"></div></div>
-</div>
-
-
-  <div id="mainContent">
-    <div id="loader" class="loader" style="display:none;">Loading...</div>
-
-    <div class="container" id="content">
-      <h1 class="title">Auraa<span class="dot">.</span></h1>
-
-      <form id="searchForm">
-        <input type="text" id="urlInput" placeholder="Surf the Web..." autocomplete="off" />
-        <div class="options">
-          <label><input type="checkbox" id="blankMode" /> Cloaking (about:blank)</label>
-        </div>
-        <button type="submit">Search</button>
-      </form>
-    </div>
-
-    <div class="sidebar">
-      <button onclick="window.location.href='games.html';"><i class="bi bi-joystick"></i></button>
-      <button onclick="window.location.href='auraachat.html';"><i class="bi bi-chat-dots"></i></button>
-      <button onclick="window.location.href='tideai.html';"><i class="bi bi-brilliance"></i></button>
-      <button onclick="window.location.href='weather.html';"><i class="bi bi-cloud"></i></button>
-      <button onclick="window.location.href='settings.html';"><i class="bi bi-gear"></i></button>
-      <button onclick="window.location.href='credits.html';"><i class="bi bi-info-circle"></i></button>
-      
-      <div class="sidebar-info">
-        <span id="battery">⚡</span>
-        <span id="time">⌚</span>
-      </div>
-    </div>
-
-    <div class="footer">Auraa V2.0 stable | By thefakesydney</div>
+  <div class="browser-bar">
+    <button onclick="goHome()"><i class="bi bi-house"></i></button>
+    <button onclick="uvBack()"><i class="bi bi-arrow-left"></i></button>
+    <button onclick="uvForward()"><i class="bi bi-arrow-right"></i></button>
+    <button onclick="uvReload()"><i class="bi bi-arrow-clockwise"></i></button>
+    <input type="text" id="browserInput" placeholder="https://example.com" />
+    <button onclick="uvNavigate()"><i class="bi bi-search"></i></button>
+    <button onclick="toggleFullscreen()"><i class="bi bi-arrows-fullscreen"></i></button>
   </div>
+
+  <div class="sidebar">
+    <button onclick="openApp('games.html')"><i class="bi bi-joystick"></i></button>
+    <button onclick="openApp('auraachat.html')"><i class="bi bi-chat-dots"></i></button>
+    <button onclick="openApp('tideai.html')"><i class="bi bi-brilliance"></i></button>
+    <button onclick="openApp('weather.html')"><i class="bi bi-cloud"></i></button>
+    <button onclick="openApp('settings.html')"><i class="bi bi-gear"></i></button>
+    <button onclick="openApp('credits.html')"><i class="bi bi-info-circle"></i></button>
+    <div class="sidebar-info">
+      <span id="battery">⚡</span><br>
+      <span id="time">⌚</span>
+    </div>
+  </div>
+
+  <div class="container" id="content">
+    <h1 class="title">Auraa<span class="dot">.</span></h1>
+    <form id="searchForm">
+      <input type="text" id="urlInput" placeholder="Surf the Web..." autocomplete="off" />
+      <div class="options">
+        <label><input type="checkbox" id="blankMode" /> Cloaking (about:blank)</label>
+      </div>
+      <button type="submit">Search</button>
+    </form>
+  </div>
+
+  <iframe id="uv-frame"></iframe>
+
+  <div class="footer">Auraa V2.0 stable | By thefakesydney</div>
 
   <script src="/active/uv/uv.bundle.js" defer></script>
   <script src="/active/uv/uv.config.js" defer></script>
-  <script src="/assets/js/register.js" defer></script>
-  <script src="/assets/js/index.js" defer></script>
   <script>
-    // Removed password modal code completely
+    let uv = null;
 
-    window.onload = function() {
-      // Show main content immediately
-      const loader = document.getElementById('loader');
-      const content = document.getElementById('content');
-      loader.style.display = 'none';
-      content.style.display = 'block';
+    window.onload = function () {
+      const stealth = JSON.parse(localStorage.getItem("stealthModeEnabled")) || false;
+      const checkbox = document.getElementById("blankMode");
+      checkbox.checked = stealth;
+      if (stealth) runStealthMode();
 
-      // Battery status
+      checkbox.addEventListener("change", function () {
+        localStorage.setItem("stealthModeEnabled", this.checked);
+      });
+
       if (navigator.getBattery) {
         navigator.getBattery().then(battery => {
           function updateBattery() {
@@ -71,14 +203,86 @@
         });
       }
 
-      // Time update every second
       function updateTime() {
         const now = new Date();
         document.getElementById("time").textContent = now.toLocaleTimeString();
       }
       setInterval(updateTime, 1000);
       updateTime();
+
+      document.getElementById("searchForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        const input = document.getElementById("urlInput").value.trim();
+        const stealth = document.getElementById("blankMode").checked;
+        openUV(input, stealth);
+      });
     };
+
+    function runStealthMode() {
+      const title = "Google";
+      const icon = "https://www.google.com/favicon.ico";
+      const src = window.location.href;
+      const popup = window.open("about:blank", "_blank");
+      const doc = popup.document;
+      doc.write(`<!DOCTYPE html><html><head><title>${title}</title><link rel="icon" href="${icon}"><style>body,html{margin:0;padding:0;overflow:hidden}</style></head><body><iframe src="${src}" style="border:none;width:100vw;height:100vh;"></iframe></body></html>`);
+      doc.close();
+      window.close();
+    }
+
+    function openUV(url, stealth = false) {
+      if (!url.startsWith("http")) url = "https://" + url;
+      const encoded = __uv$config.encodeUrl(url);
+      const fullUrl = __uv$config.prefix + encoded;
+
+      if (stealth) {
+        runStealthMode();
+      } else {
+        const frame = document.getElementById("uv-frame");
+        frame.src = fullUrl;
+        frame.style.display = "block";
+        document.getElementById("content").style.display = "none";
+      }
+    }
+
+    function uvNavigate() {
+      const val = document.getElementById("browserInput").value.trim();
+      openUV(val, false);
+    }
+
+    function goHome() {
+      document.getElementById("uv-frame").src = "";
+      document.getElementById("uv-frame").style.display = "none";
+      document.getElementById("content").style.display = "block";
+    }
+
+    function uvBack() {
+      const iframe = document.getElementById("uv-frame");
+      if (iframe && iframe.contentWindow) iframe.contentWindow.history.back();
+    }
+
+    function uvForward() {
+      const iframe = document.getElementById("uv-frame");
+      if (iframe && iframe.contentWindow) iframe.contentWindow.history.forward();
+    }
+
+    function uvReload() {
+      const iframe = document.getElementById("uv-frame");
+      if (iframe && iframe.contentWindow) iframe.contentWindow.location.reload();
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    function openApp(page) {
+      document.getElementById("uv-frame").style.display = "none";
+      document.getElementById("content").style.display = "none";
+      window.location.href = page;
+    }
   </script>
 </body>
 </html>
