@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>IXL | Math, Language arts, Science, Social Studies, and Spanish</title>
+	<title>Auraa Home</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 	<style>
 		body {
@@ -60,13 +60,65 @@
 			color: white;
 		}
 
-		/* Main layout */
+		/* Top Search Bar */
+		#topSearchBar {
+			position: fixed;
+			top: 0;
+			left: 60px;
+			/* next to sidebar */
+			right: 0;
+			height: 48px;
+			display: flex;
+			align-items: center;
+			padding: 0 12px;
+			background: transparent;
+			/* NO black box */
+			z-index: 1200;
+			backdrop-filter: blur(6px);
+			/* subtle blur for readability */
+		}
+
+		#topSearchBar input {
+			flex: 1;
+			height: 32px;
+			padding: 6px 12px;
+			font-size: 16px;
+			border-radius: 6px;
+			border: none;
+			background: #2a004d;
+			color: white;
+		}
+
+		#topSearchBar input::placeholder {
+			color: #bbb;
+		}
+
+		#topSearchBar button {
+			margin-left: 8px;
+			padding: 8px 14px;
+			background: #7b2cbf;
+			border: none;
+			border-radius: 6px;
+			color: white;
+			font-size: 16px;
+			cursor: pointer;
+			user-select: none;
+			transition: background-color 0.3s;
+		}
+
+		#topSearchBar button:hover {
+			background: #9e43e5;
+		}
+
+		/* Tabs and Main Layout below top search */
 		#mainLayout {
 			margin-left: 60px;
+			margin-top: 48px;
+			/* to avoid overlap with top search bar */
 			flex: 1;
 			display: flex;
 			flex-direction: column;
-			height: 100vh;
+			height: calc(100vh - 48px);
 		}
 
 		#tabsWrapper {
@@ -135,7 +187,6 @@
 
 		#mainContent {
 			flex: 1;
-			padding-top: 60px;
 			position: relative;
 			overflow: hidden;
 		}
@@ -213,6 +264,11 @@
 		<button title="Credits" id="btnCredits" aria-label="Credits"><i class="bi bi-info-circle"></i></button>
 	</div>
 
+	<div id="topSearchBar">
+		<input type="text" id="topSearchInput" placeholder="Search or enter URL..." autocomplete="off" />
+		<button id="topSearchGo" aria-label="Go">Go</button>
+	</div>
+
 	<div id="mainLayout">
 		<div id="tabsWrapper">
 			<div id="tabs"></div>
@@ -241,10 +297,6 @@
     const iframe = document.getElementById("tabView");
     const homePage = document.getElementById("homePage");
     const HOME_TITLE = "Home";
-
-    if (typeof __uv$config === "undefined") {
-      console.error("UV config is not loaded! Make sure uv.config.js is included.");
-    }
 
     function createTab(title, src) {
       const tab = document.createElement("div");
@@ -348,14 +400,31 @@
       tabElement.classList.add("active");
     }
 
+    // Top search bar: click Go button
+    document.getElementById("topSearchGo").onclick = function() {
+      const q = document.getElementById("topSearchInput").value.trim();
+      if (!q) return;
+      const activeTab = getActiveTab();
+      if (!activeTab) return;
+      loadInTab(q, activeTab);
+      document.getElementById("topSearchInput").value = "";
+    };
+
+    // Top search bar: press Enter key inside input
+    document.getElementById("topSearchInput").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        document.getElementById("topSearchGo").click();
+      }
+    });
+
+    // Mini search on homepage
     document.getElementById("miniSearch").addEventListener("submit", function(e) {
       e.preventDefault();
       const q = document.getElementById("miniInput").value.trim();
       if (!q) return;
-
       const activeTab = getActiveTab();
       if (!activeTab) return;
-
       loadInTab(q, activeTab);
       document.getElementById("miniInput").value = "";
     });
