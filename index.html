@@ -1,84 +1,450 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title> IXL | Math, Language Arts, Science, Social Studies, and Spanish </title>
-  <link rel="icon" type="image/x-icon" href="ixlicon.png" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
-  <link rel="stylesheet" href="assets/css/style.css" />
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Auraa Home</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+	<style>
+		body {
+			margin: 0;
+			background: #0a0014;
+			color: white;
+			font-family: sans-serif;
+			overflow: hidden;
+			height: 100vh;
+			display: flex;
+		}
+
+		/* Sidebar */
+		#sidebar {
+			width: 60px;
+			background: #180028;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			padding: 10px 0;
+			gap: 20px;
+			position: fixed;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			z-index: 1100;
+		}
+
+		#sidebar button {
+			background: transparent;
+			border: none;
+			color: #b86bff;
+			font-size: 26px;
+			cursor: pointer;
+			user-select: none;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 40px;
+			height: 40px;
+			border-radius: 8px;
+			transition: background 0.3s, color 0.3s;
+		}
+
+		#sidebar button:hover {
+			background: #7b2cbf;
+			color: white;
+		}
+
+		#sidebar button:focus {
+			outline: none;
+			background: #a44cd2;
+			color: white;
+		}
+
+		/* Main layout */
+		#mainLayout {
+			margin-left: 60px;
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			height: 100vh;
+		}
+
+		#topBar {
+			background: #1a0033;
+			display: flex;
+			align-items: center;
+			padding: 10px;
+			gap: 10px;
+			z-index: 1000;
+		}
+
+		#topBar input {
+			flex: 1;
+			padding: 10px;
+			border-radius: 6px;
+			border: none;
+			background: #2a004d;
+			color: white;
+			font-size: 16px;
+		}
+
+		#topBar button {
+			padding: 10px 12px;
+			border: none;
+			border-radius: 6px;
+			background: #7b2cbf;
+			color: white;
+			font-size: 16px;
+			cursor: pointer;
+			user-select: none;
+		}
+
+		#tabsWrapper {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			background: #180028;
+			padding: 4px 8px;
+			margin-top: 0;
+		}
+
+		#tabs {
+			display: flex;
+			overflow-x: auto;
+			flex: 1;
+		}
+
+		.tab {
+			background: #32004f;
+			color: white;
+			border: none;
+			padding: 6px 14px;
+			border-radius: 8px 8px 0 0;
+			margin-right: 6px;
+			cursor: pointer;
+			font-size: 14px;
+			position: relative;
+			white-space: nowrap;
+			user-select: none;
+			display: flex;
+			align-items: center;
+		}
+
+		.tab.active {
+			background: #a44cd2;
+		}
+
+		.tab .tab-title {
+			user-select: text;
+		}
+
+		.tab .close-btn {
+			margin-left: 8px;
+			font-weight: bold;
+			cursor: pointer;
+			color: #ccc;
+			user-select: none;
+		}
+
+		#tabControls {
+			display: flex;
+			gap: 6px;
+			margin-left: 10px;
+		}
+
+		#tabControls button {
+			background: #7b2cbf;
+			color: white;
+			border: none;
+			border-radius: 6px;
+			padding: 4px 8px;
+			cursor: pointer;
+			font-size: 16px;
+			user-select: none;
+		}
+
+		#mainContent {
+			flex: 1;
+			padding-top: 120px;
+			position: relative;
+			overflow: hidden;
+		}
+
+		iframe {
+			width: 100%;
+			height: 100%;
+			border: none;
+			display: none;
+		}
+
+		#homePage {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			color: white;
+			background: #0a0014;
+			padding: 0 20px;
+			display: none;
+			user-select: none;
+		}
+
+		#homePage h1 {
+			font-size: 60px;
+			color: #b86bff;
+			text-shadow: 0 0 10px #a44cd2;
+			margin-bottom: 30px;
+		}
+
+		#homePage form {
+			display: flex;
+			gap: 10px;
+		}
+
+		#homePage input[type="text"] {
+			padding: 12px 18px;
+			width: 320px;
+			font-size: 16px;
+			border: none;
+			border-radius: 6px;
+			background: #2a004d;
+			color: white;
+		}
+
+		#homePage button {
+			padding: 12px 20px;
+			background: #7b2cbf;
+			color: white;
+			font-size: 16px;
+			border: none;
+			border-radius: 6px;
+			cursor: pointer;
+			user-select: none;
+		}
+
+		#homePage button:hover {
+			background: #9e43e5;
+		}
+	</style>
 </head>
+
 <body>
-  <div class="bubbles">
-  <div class="meteor-wrap"><div class="meteor"></div></div>
-</div>
+	<div id="sidebar" aria-label="Sidebar navigation">
+		<button title="Games" id="btnGames" aria-label="Games"><i class="bi bi-joystick"></i></button>
+		<button title="Chat" id="btnChat" aria-label="Chat"><i class="bi bi-chat-dots"></i></button>
+		<button title="AI" id="btnAI" aria-label="AI"><i class="bi bi-robot"></i></button>
+		<button title="Weather" id="btnWeather" aria-label="Weather"><i class="bi bi-cloud-rain"></i></button>
+		<button title="Settings" id="btnSettings" aria-label="Settings"><i class="bi bi-gear"></i></button>
+		<button title="Credits" id="btnCredits" aria-label="Credits"><i class="bi bi-info-circle"></i></button>
+	</div>
 
+	<div id="mainLayout">
+		<div id="topBar">
+			<input type="text" id="globalSearch" placeholder="Search or enter URL..." autocomplete="off" />
+			<button id="globalGo" aria-label="Go">Go</button>
+		</div>
 
-  <div id="mainContent">
-    <div id="loader" class="loader" style="display:none;">Loading...</div>
+		<div id="tabsWrapper">
+			<div id="tabs"></div>
+			<div id="tabControls">
+				<button id="backBtn" title="Back"><i class="bi bi-arrow-left"></i></button>
+				<button id="forwardBtn" title="Forward"><i class="bi bi-arrow-right"></i></button>
+				<button id="homeBtn" title="Home"><i class="bi bi-house"></i></button>
+				<button id="addTabBtn" title="New Tab">+</button>
+			</div>
+		</div>
 
-    <div class="container" id="content">
-      <h1 class="title">Auraa<span class="dot">.</span></h1>
+		<div id="mainContent">
+			<div id="homePage" role="main">
+				<h1>Auraa<span class="dot">.</span></h1>
+				<form id="miniSearch">
+					<input type="text" id="miniInput" placeholder="Search the web..." autocomplete="off" />
+					<button type="submit">Search</button>
+				</form>
+			</div>
+			<iframe id="tabView" title="Browser content"></iframe>
+		</div>
+	</div>
 
-      <form id="searchForm">
-        <input type="text" id="urlInput" placeholder="Surf the Web..." autocomplete="off" />
-        <div class="options">
-          <label><input type="checkbox" id="blankMode" /> Cloaking (about:blank)</label>
-        </div>
-        <button type="submit">Search</button>
-      </form>
-    </div>
+	<script>
+		const tabs = document.getElementById("tabs");
+    const iframe = document.getElementById("tabView");
+    const homePage = document.getElementById("homePage");
+    const globalSearch = document.getElementById("globalSearch");
+    const HOME_TITLE = "Home";
 
-    <div class="sidebar">
-      <button onclick="window.location.href='games.html';"><i class="bi bi-joystick"></i></button>
-      <button onclick="window.location.href='auraachat.html';"><i class="bi bi-chat-dots"></i></button>
-      <button onclick="window.location.href='tideai.html';"><i class="bi bi-brilliance"></i></button>
-      <button onclick="window.location.href='weather.html';"><i class="bi bi-cloud"></i></button>
-      <button onclick="window.location.href='settings.html';"><i class="bi bi-gear"></i></button>
-      <button onclick="window.location.href='credits.html';"><i class="bi bi-info-circle"></i></button>
-      
-      <div class="sidebar-info">
-        <span id="battery">⚡</span>
-        <span id="time">⌚</span>
-      </div>
-    </div>
+    function createTab(title, src) {
+      const tab = document.createElement("div");
+      tab.className = "tab";
+      tab.setAttribute("data-src", src);
 
-    <div class="footer">Auraa V2.0 stable | By thefakesydney</div>
-  </div>
+      const titleSpan = document.createElement("span");
+      titleSpan.className = "tab-title";
+      titleSpan.textContent = title;
 
-  <script src="/active/uv/uv.bundle.js" defer></script>
-  <script src="/active/uv/uv.config.js" defer></script>
-  <script src="/assets/js/register.js" defer></script>
-  <script src="/assets/js/index.js" defer></script>
-  <script>
-    // Removed password modal code completely
+      const closeBtn = document.createElement("span");
+      closeBtn.className = "close-btn";
+      closeBtn.textContent = "×";
 
-    window.onload = function() {
-      // Show main content immediately
-      const loader = document.getElementById('loader');
-      const content = document.getElementById('content');
-      loader.style.display = 'none';
-      content.style.display = 'block';
+      tab.appendChild(titleSpan);
+      tab.appendChild(closeBtn);
+      return tab;
+    }
 
-      // Battery status
-      if (navigator.getBattery) {
-        navigator.getBattery().then(battery => {
-          function updateBattery() {
-            document.getElementById("battery").textContent = `${Math.round(battery.level * 100)}% ⚡`;
+    function switchTab(tabElement) {
+      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+      tabElement.classList.add("active");
+      const src = tabElement.getAttribute("data-src");
+
+      if (src === "home") {
+        iframe.style.display = "none";
+        iframe.src = ""; // Clear iframe when home active
+        homePage.style.display = "flex";
+        globalSearch.value = "";
+      } else {
+        homePage.style.display = "none";
+        iframe.style.display = "block";
+        iframe.src = src;
+        globalSearch.value = src;
+      }
+    }
+
+    function openHomeTab() {
+      tabs.innerHTML = "";
+      const homeTab = createTab(HOME_TITLE, "home");
+      homeTab.classList.add("active");
+      tabs.appendChild(homeTab);
+      switchTab(homeTab);
+    }
+
+    function getActiveTab() {
+      return document.querySelector(".tab.active");
+    }
+
+    // Initialize with home tab open
+    openHomeTab();
+
+    tabs.addEventListener("click", function(e) {
+      const target = e.target;
+      if (target.classList.contains("close-btn")) {
+        const tab = target.parentElement;
+        const wasActive = tab.classList.contains("active");
+        tab.remove();
+        if (wasActive) {
+          if (tabs.children.length) {
+            switchTab(tabs.children[0]);
+          } else {
+            openHomeTab();
           }
-          updateBattery();
-          battery.addEventListener("levelchange", updateBattery);
-        });
+        }
+      } else if (target.classList.contains("tab")) {
+        switchTab(target);
       }
+    });
 
-      // Time update every second
-      function updateTime() {
-        const now = new Date();
-        document.getElementById("time").textContent = now.toLocaleTimeString();
-      }
-      setInterval(updateTime, 1000);
-      updateTime();
+    // Top bar search/go button
+    document.getElementById("globalGo").onclick = function() {
+      const input = globalSearch.value.trim();
+      if (!input) return;
+
+      const activeTab = getActiveTab();
+      if (!activeTab) return;
+
+      // Determine if input is URL or search query
+      const isUrl = input.includes(".") || input.startsWith("http");
+      const rawUrl = isUrl ? input : `https://www.google.com/search?q=${encodeURIComponent(input)}`;
+
+      // Use UV proxy for loading in iframe
+      const uvUrl = "/active/uv/" + encodeURIComponent(rawUrl);
+
+      // Update tab src and title
+      activeTab.setAttribute("data-src", uvUrl);
+      const titleSpan = activeTab.querySelector(".tab-title");
+      if (titleSpan) titleSpan.textContent = input;
+
+      // Load iframe and switch tab visually
+      iframe.src = uvUrl;
+      switchTab(activeTab);
+      globalSearch.value = "";
     };
-  </script>
+
+    // **Fix: Pressing Enter on top search triggers Go**
+    globalSearch.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        document.getElementById("globalGo").click();
+      }
+    });
+
+    // Bottom mini search on home page - use UV proxy too
+    document.getElementById("miniSearch").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const q = document.getElementById("miniInput").value.trim();
+      if (!q) return;
+
+      const activeTab = getActiveTab();
+      if (!activeTab) return;
+
+      const searchUrl = "https://www.google.com/search?q=" + encodeURIComponent(q);
+      const uvUrl = "/active/uv/" + encodeURIComponent(searchUrl);
+
+      activeTab.setAttribute("data-src", uvUrl);
+      const titleSpan = activeTab.querySelector(".tab-title");
+      if (titleSpan) titleSpan.textContent = q;
+
+      iframe.src = uvUrl;
+      homePage.style.display = "none";
+      iframe.style.display = "block";
+
+      document.getElementById("miniInput").value = "";
+      globalSearch.value = "";
+    });
+
+    document.getElementById("addTabBtn").onclick = function () {
+      const newTab = createTab("New Tab", "home");
+      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+      tabs.appendChild(newTab);
+      switchTab(newTab);
+    };
+
+    document.getElementById("backBtn").onclick = function () {
+      try {
+        iframe.contentWindow.history.back();
+      } catch { /* ignore cross-origin errors */ }
+    };
+
+    document.getElementById("forwardBtn").onclick = function () {
+      try {
+        iframe.contentWindow.history.forward();
+      } catch { /* ignore cross-origin errors */ }
+    };
+
+    document.getElementById("homeBtn").onclick = function () {
+      openHomeTab();
+    };
+
+    // Sidebar button handlers: load directly, no UV proxy
+    document.getElementById("btnGames").onclick = () => loadSidebarPage("games.html", "Games");
+    document.getElementById("btnChat").onclick = () => loadSidebarPage("auraachat.html", "Chat");
+    document.getElementById("btnAI").onclick = () => loadSidebarPage("tideai.html", "AI");
+    document.getElementById("btnWeather").onclick = () => loadSidebarPage("weather.html", "Weather");
+    document.getElementById("btnSettings").onclick = () => loadSidebarPage("settings.html", "Settings");
+    document.getElementById("btnCredits").onclick = () => loadSidebarPage("credits.html", "Credits");
+
+    function loadSidebarPage(page, title) {
+      let sidebarTab = Array.from(tabs.children).find(t => t.getAttribute("data-src") === page);
+      if (!sidebarTab) {
+        sidebarTab = createTab(title, page);
+        tabs.appendChild(sidebarTab);
+      }
+      switchTab(sidebarTab);
+    }
+	</script>
 </body>
+
 </html>
