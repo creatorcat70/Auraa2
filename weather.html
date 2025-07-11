@@ -1,132 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Weather | Auraa</title>
-<style>
-  body {
-    margin: 0;
-    padding: 0;
-    display: flex; flex-direction: column;
-    font-family: Arial, sans-serif;
-    background: #2a003f;
-    color: white;
-    height: 100vh;
-  }
-  .top-bar {
-    background: #3a005f;
-    padding: 1rem;
-  }
-  .top-bar button {
-    background: #9d4edd;
-    border: none; border-radius: 5px;
-    padding: 8px 16px; font-size: 1rem;
-    color: white; cursor: pointer;
-  }
-  .main {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-  }
-  .left-panel, .right-panel {
-    padding: 2rem;
-    box-sizing: border-box;
-    overflow-y: auto;
-  }
-  .left-panel {
-    width: 45%;
-    border-right: 1px solid #555;
-  }
-  .right-panel {
-    width: 55%;
-  }
-  #weatherIcon {
-    font-size: 5rem;
-    margin: 1rem 0;
-  }
-  .info-line {
-    font-size: 1.2rem;
-    margin: .5rem 0;
-  }
-  #locationName {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: .5rem;
-    font-size: 1.1rem;
-    font-weight: 600;
-  }
-  .weather-btn {
-    background: #7b2cbf;
-    border: none;
-    border-radius: 20px;
-    padding: 10px 20px;
-    font-size: 1rem;
-    color: white;
-    cursor: pointer;
-    margin: 1rem 0;
-  }
-  .weather-btn:hover {
-    background: #9d4edd;
-  }
-  #message {
-    margin-top: .5rem;
-    color: #f0a;
-    font-weight: bold;
-  }
-  .calendar {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
-  }
-  .calendar-day {
-    padding: 1rem;
-    background: #4b0082;
-    border-radius: 10px;
-    text-align: center;
-    cursor: pointer;
-    transition: background 0.2s;
-    user-select: none;
-  }
-  .calendar-day.selected {
-    background: #7b2cbf;
-    box-shadow: 0 0 10px #9d4edd;
-  }
-  .calendar-day .day-label {
-    font-weight: 600;
-    margin-bottom: .5rem;
-  }
-  .calendar-day .temp-range {
-    font-size: .9rem;
-  }
-</style>
-</head>
-<body>
-  <div class="top-bar">
-    <button onclick="window.location.href='index.html'">← Back to Homepage</button>
-  </div>
-  <div class="main">
-    <div class="left-panel">
-      <h2>Weather Details</h2>
-      <div id="weatherIcon"></div>
-      <div id="tempNow" class="info-line"></div>
-      <div id="feelsLike" class="info-line"></div>
-      <div id="windSpeed" class="info-line"></div>
-      <div id="description" class="info-line"></div>
-      <div id="locationName"><span id="locationFlag"></span><span id="locationText"></span></div>
-      <button id="unitToggle" class="weather-btn">Switch to °F</button>
-      <div id="message">Waiting for location permission...</div>
-      <button id="retryBtn" class="weather-btn" style="display:none;">Retry</button>
-    </div>
-    <div class="right-panel">
-      <h2>16‑Day Calendar</h2>
-      <div class="calendar" id="calendar"></div>
-    </div>
-  </div>
 
-<script>
-let isFahrenheit = false;
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Weather | Auraa</title>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			display: flex;
+			flex-direction: column;
+			font-family: Arial, sans-serif;
+			background: #2a003f;
+			color: white;
+			height: 100vh;
+		}
+
+		.top-bar {
+			background: #3a005f;
+			padding: 1rem;
+		}
+
+		.top-bar button {
+			background: #9d4edd;
+			border: none;
+			border-radius: 5px;
+			padding: 8px 16px;
+			font-size: 1rem;
+			color: white;
+			cursor: pointer;
+		}
+
+		.main {
+			display: flex;
+			flex: 1;
+			overflow: hidden;
+		}
+
+		.left-panel,
+		.right-panel {
+			padding: 2rem;
+			box-sizing: border-box;
+			overflow-y: auto;
+		}
+
+		.left-panel {
+			width: 45%;
+			border-right: 1px solid #555;
+		}
+
+		.right-panel {
+			width: 55%;
+		}
+
+		#weatherIcon {
+			font-size: 5rem;
+			margin: 1rem 0;
+		}
+
+		.info-line {
+			font-size: 1.2rem;
+			margin: .5rem 0;
+		}
+
+		#locationName {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			margin-top: .5rem;
+			font-size: 1.1rem;
+			font-weight: 600;
+		}
+
+		.weather-btn {
+			background: #7b2cbf;
+			border: none;
+			border-radius: 20px;
+			padding: 10px 20px;
+			font-size: 1rem;
+			color: white;
+			cursor: pointer;
+			margin: 1rem 0;
+		}
+
+		.weather-btn:hover {
+			background: #9d4edd;
+		}
+
+		#message {
+			margin-top: .5rem;
+			color: #f0a;
+			font-weight: bold;
+		}
+
+		.calendar {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 1rem;
+		}
+
+		.calendar-day {
+			padding: 1rem;
+			background: #4b0082;
+			border-radius: 10px;
+			text-align: center;
+			cursor: pointer;
+			transition: background 0.2s;
+			user-select: none;
+		}
+
+		.calendar-day.selected {
+			background: #7b2cbf;
+			box-shadow: 0 0 10px #9d4edd;
+		}
+
+		.calendar-day .day-label {
+			font-weight: 600;
+			margin-bottom: .5rem;
+		}
+
+		.calendar-day .temp-range {
+			font-size: .9rem;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="top-bar">
+		<button onclick="window.location.href='index.html'">← Back to Homepage</button>
+	</div>
+	<div class="main">
+		<div class="left-panel">
+			<h2>Weather Details</h2>
+			<div id="weatherIcon"></div>
+			<div id="tempNow" class="info-line"></div>
+			<div id="feelsLike" class="info-line"></div>
+			<div id="windSpeed" class="info-line"></div>
+			<div id="description" class="info-line"></div>
+			<div id="locationName"><span id="locationFlag"></span><span id="locationText"></span></div>
+			<button id="unitToggle" class="weather-btn">Switch to °F</button>
+			<div id="message">Waiting for location permission...</div>
+			<button id="retryBtn" class="weather-btn" style="display:none;">Retry</button>
+		</div>
+		<div class="right-panel">
+			<h2>16‑Day Calendar</h2>
+			<div class="calendar" id="calendar"></div>
+		</div>
+	</div>
+
+	<script>
+		let isFahrenheit = false;
 let forecast = [];
 const weatherIcon = document.getElementById('weatherIcon');
 const tempNowEl = document.getElementById('tempNow');
@@ -171,7 +195,21 @@ function selectDay(i) {
 unitToggle.onclick = () => {
   isFahrenheit = !isFahrenheit;
   unitToggle.textContent = isFahrenheit ? 'Switch to °C' : 'Switch to °F';
-  selectDay(parseInt(document.querySelector('.calendar-day.selected').dataset.index));
+
+  // Update calendar temps
+  document.querySelectorAll('.calendar-day').forEach(dayEl => {
+    const i = parseInt(dayEl.dataset.index);
+    const d = forecast[i];
+    const tempRange = `${formatTemp(d.min)} • ${formatTemp(d.max)}`;
+    dayEl.querySelector('.temp-range').textContent = tempRange;
+  });
+
+  // Update selected day
+  const selectedEl = document.querySelector('.calendar-day.selected');
+  if (selectedEl) {
+    const selectedIndex = parseInt(selectedEl.dataset.index);
+    selectDay(selectedIndex);
+  }
 };
 
 retryBtn.onclick = initWeather;
@@ -222,6 +260,7 @@ async function initWeather() {
 }
 
 window.onload = initWeather;
-</script>
+	</script>
 </body>
+
 </html>
