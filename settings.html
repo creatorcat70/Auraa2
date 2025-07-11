@@ -50,6 +50,7 @@
       max-width: 300px;
       margin-left: auto;
       margin-right: auto;
+      cursor: pointer;
     }
 
     select, input[type=number], button {
@@ -77,6 +78,8 @@
     input[type="checkbox"] {
       margin-right: 10px;
       transform: scale(1.2);
+      vertical-align: middle;
+      cursor: pointer;
     }
 
     .footer {
@@ -93,7 +96,7 @@
   <h1 class="title">Auraa<span class="dot"> Settings.</span></h1>
 
   <label for="cloakSelect">Cloak tab as:</label>
-  <select id="cloakSelect">
+  <select id="cloakSelect" aria-label="Select cloak tab icon and title">
     <option value="default">Default - Auraa</option>
     <option value="https://www.khanacademy.org/favicon.ico|Khan Academy">Khan Academy</option>
     <option value="https://www.google.com/favicon.ico|Google Classroom">Google Classroom</option>
@@ -102,7 +105,16 @@
     <option value="https://cdn.jsdelivr.net/gh/FortAwesome/Font-Awesome@6/svgs/solid/book.svg|Scholarly">Scholarly</option>
   </select>
 
-  <label for="particleCountInput" style="margin-top:40px;">Number of falling particles:</label>
+  <label for="searchEngineSelect">Default Search Engine:</label>
+  <select id="searchEngineSelect" aria-label="Select default search engine">
+    <option value="duckduckgo">DuckDuckGo</option>
+    <option value="google">Google</option>
+    <option value="bing">Bing</option>
+    <option value="startpage">Startpage</option>
+    <option value="brave">Brave</option>
+  </select>
+
+  <label for="particleCountInput">Number of falling particles:</label>
   <input
     type="number"
     id="particleCountInput"
@@ -112,8 +124,8 @@
     placeholder="Enter number (0-300)"
   />
 
-  <label for="particleToggle" style="margin-top:40px;">
-    <input type="checkbox" id="particleToggle" checked /> Enable falling particles effect
+  <label for="particleToggle">
+    <input type="checkbox" id="particleToggle" /> Enable falling particles effect
   </label>
 
   <button id="saveBtn" style="margin-top:40px;">Save Settings</button>
@@ -126,6 +138,8 @@
     const particleCountInput = document.getElementById('particleCountInput');
     const particleToggle = document.getElementById('particleToggle');
     const saveBtn = document.getElementById('saveBtn');
+    const searchEngineSelect = document.getElementById('searchEngineSelect');
+    const dynamicFavicon = document.getElementById('dynamicFavicon');
 
     function loadSettings() {
       const cloak = localStorage.getItem('auraaCloak') || 'default';
@@ -134,30 +148,38 @@
       const count = localStorage.getItem('auraaParticleCount') || '100';
       particleCountInput.value = count;
 
-      // Particle toggle always starts enabled visually, but still saved
       const enabled = localStorage.getItem('auraaParticlesEnabled');
       particleToggle.checked = enabled !== 'false';
+
+      const engine = localStorage.getItem('searchEngine') || 'duckduckgo';
+      searchEngineSelect.value = engine;
+
+      // Update title and favicon based on cloak
+      updateCloakVisuals();
     }
 
     function saveSettings() {
       localStorage.setItem('auraaCloak', cloakSelect.value);
       localStorage.setItem('auraaParticleCount', particleCountInput.value);
       localStorage.setItem('auraaParticlesEnabled', particleToggle.checked);
+      localStorage.setItem('searchEngine', searchEngineSelect.value);
       alert('Settings saved!');
+      updateCloakVisuals();
     }
 
-    saveBtn.addEventListener('click', saveSettings);
-
-    cloakSelect.addEventListener('change', () => {
+    function updateCloakVisuals() {
       if (cloakSelect.value === 'default') {
         document.title = "Auraa Settings";
-        document.getElementById('dynamicFavicon').href = "icon.png";
+        dynamicFavicon.href = "icon.png";
         return;
       }
       const [iconUrl, siteTitle] = cloakSelect.value.split('|');
-      document.title = siteTitle;
-      document.getElementById('dynamicFavicon').href = iconUrl;
-    });
+      document.title = siteTitle + " Settings";
+      dynamicFavicon.href = iconUrl;
+    }
+
+    cloakSelect.addEventListener('change', updateCloakVisuals);
+    saveBtn.addEventListener('click', saveSettings);
 
     loadSettings();
   </script>
@@ -234,18 +256,25 @@
       animationFrameId = null;
     }
 
-    particleToggle.addEventListener('change', () => {
+    function updateParticlesEffect() {
       const enabled = particleToggle.checked;
-      localStorage.setItem('auraaParticlesEnabled', enabled);
       if (enabled) {
         createParticles();
       } else {
         removeParticles();
       }
+    }
+
+    particleToggle.addEventListener('change', () => {
+      localStorage.setItem('auraaParticlesEnabled', particleToggle.checked);
+      updateParticlesEffect();
     });
 
-    // ✅ Always start particles by default
-    createParticles();
+    // Run on load:
+    window.addEventListener('load', () => {
+      loadSettings();
+      updateParticlesEffect();
+    });
   </script>
 </body>
 </html>
