@@ -69,36 +69,6 @@
 			height: 100vh;
 		}
 
-		#topBar {
-			background: #1a0033;
-			display: flex;
-			align-items: center;
-			padding: 10px;
-			gap: 10px;
-			z-index: 1000;
-		}
-
-		#topBar input {
-			flex: 1;
-			padding: 10px;
-			border-radius: 6px;
-			border: none;
-			background: #2a004d;
-			color: white;
-			font-size: 16px;
-		}
-
-		#topBar button {
-			padding: 10px 12px;
-			border: none;
-			border-radius: 6px;
-			background: #7b2cbf;
-			color: white;
-			font-size: 16px;
-			cursor: pointer;
-			user-select: none;
-		}
-
 		#tabsWrapper {
 			display: flex;
 			justify-content: space-between;
@@ -165,7 +135,7 @@
 
 		#mainContent {
 			flex: 1;
-			padding-top: 120px;
+			padding-top: 60px;
 			position: relative;
 			overflow: hidden;
 		}
@@ -244,11 +214,6 @@
 	</div>
 
 	<div id="mainLayout">
-		<div id="topBar">
-			<input type="text" id="globalSearch" placeholder="Search or enter URL..." autocomplete="off" />
-			<button id="globalGo" aria-label="Go">Go</button>
-		</div>
-
 		<div id="tabsWrapper">
 			<div id="tabs"></div>
 			<div id="tabControls">
@@ -275,10 +240,8 @@
 		const tabs = document.getElementById("tabs");
     const iframe = document.getElementById("tabView");
     const homePage = document.getElementById("homePage");
-    const globalSearch = document.getElementById("globalSearch");
     const HOME_TITLE = "Home";
 
-    // --- Your UV proxy config must be loaded before this script ---
     if (typeof __uv$config === "undefined") {
       console.error("UV config is not loaded! Make sure uv.config.js is included.");
     }
@@ -308,14 +271,12 @@
 
       if (src === "home") {
         iframe.style.display = "none";
-        iframe.src = ""; // Clear iframe when home active
+        iframe.src = "";
         homePage.style.display = "flex";
-        globalSearch.value = "";
       } else {
         homePage.style.display = "none";
         iframe.style.display = "block";
         iframe.src = src;
-        globalSearch.value = src.replace(/^\/active\/uv\//, ""); // strip UV prefix for display
       }
     }
 
@@ -331,10 +292,8 @@
       return document.querySelector(".tab.active");
     }
 
-    // Init with home tab open
     openHomeTab();
 
-    // Tab click handlers
     tabs.addEventListener("click", function(e) {
       const target = e.target;
       if (target.classList.contains("close-btn")) {
@@ -355,7 +314,6 @@
       }
     });
 
-    // Generate search or URL for UV proxy
     function generateSearchUrl(query) {
       try {
         const url = new URL(query);
@@ -369,7 +327,6 @@
       return `https://duckduckgo.com/search?q=${encodeURIComponent(query)}&source=web`;
     }
 
-    // Load URL or search in a tab using UV proxy
     function loadInTab(url, tabElement) {
       if (typeof __uv$config === "undefined") {
         alert("UV proxy is not configured properly.");
@@ -387,32 +344,10 @@
       iframe.style.display = "block";
       homePage.style.display = "none";
 
-      // Make this tab active visually
       document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
       tabElement.classList.add("active");
-      globalSearch.value = url;
     }
 
-    // Top bar search and Go button
-    document.getElementById("globalGo").onclick = function() {
-      const url = globalSearch.value.trim();
-      if (!url) return;
-
-      const activeTab = getActiveTab();
-      if (!activeTab) return;
-
-      loadInTab(url, activeTab);
-    };
-
-    // Pressing Enter on top search triggers Go
-    globalSearch.addEventListener("keydown", function(e) {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        document.getElementById("globalGo").click();
-      }
-    });
-
-    // Bottom mini search on home page using UV proxy
     document.getElementById("miniSearch").addEventListener("submit", function(e) {
       e.preventDefault();
       const q = document.getElementById("miniInput").value.trim();
@@ -425,7 +360,6 @@
       document.getElementById("miniInput").value = "";
     });
 
-    // Add new tab button
     document.getElementById("addTabBtn").onclick = function() {
       const newTab = createTab("New Tab", "home");
       document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
@@ -433,7 +367,6 @@
       switchTab(newTab);
     };
 
-    // Back / Forward buttons (try to access iframe history, fail silently)
     document.getElementById("backBtn").onclick = function() {
       try {
         iframe.contentWindow.history.back();
@@ -446,12 +379,11 @@
       } catch {}
     };
 
-    // Home button closes all tabs and opens home tab
     document.getElementById("homeBtn").onclick = function() {
       openHomeTab();
     };
 
-    // Sidebar buttons: load page directly (no UV proxy)
+    // Sidebar buttons load local pages (no UV proxy)
     document.getElementById("btnGames").onclick = () => loadSidebarPage("games.html", "Games");
     document.getElementById("btnChat").onclick = () => loadSidebarPage("auraachat.html", "Chat");
     document.getElementById("btnAI").onclick = () => loadSidebarPage("tideai.html", "AI");
@@ -469,7 +401,7 @@
     }
 	</script>
 
-	<!-- Make sure you have your UV proxy scripts loaded before this -->
+	<!-- UV proxy scripts -->
 	<script src="/active/uv/uv.bundle.js" defer></script>
 	<script src="/active/uv/uv.config.js" defer></script>
 </body>
