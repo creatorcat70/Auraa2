@@ -1,6 +1,6 @@
   function runStealthMode() {
     const title = "Calculator - Google Search";
-    const icon = "https://www.google.com/favicon.ico";
+    const icon = "ixlicon.png";
     const src = window.location.href;
 
     const popup = window.open("about:blank", "_blank");
