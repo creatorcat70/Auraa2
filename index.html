@@ -1,282 +1,282 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>Auraa</title>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
-	<style>
-		* {
-			box-sizing: border-box;
-		}
-
-		body {
-			margin: 0;
-			font-family: 'Poppins', sans-serif;
-			background: linear-gradient(135deg, #2a003f, #000000);
-			color: #fff;
-			height: 100vh;
-			overflow: hidden;
-			display: flex;
-		}
-
-		#sidebar {
-			width: 70px;
-			background: #190028;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			padding: 20px 0;
-			gap: 20px;
-			position: fixed;
-			top: 0;
-			bottom: 0;
-			left: 0;
-			z-index: 1000;
-		}
-
-		#sidebar button {
-			background: transparent;
-			border: none;
-			color: #c285ff;
-			font-size: 24px;
-			cursor: pointer;
-			border-radius: 12px;
-			padding: 10px;
-			transition: background 0.3s ease;
-		}
-
-		#sidebar button:hover {
-			background: #7b2cbf;
-			color: white;
-		}
-
-		#topSearchBar {
-			position: fixed;
-			top: 0;
-			left: 70px;
-			right: 0;
-			height: 50px;
-			display: flex;
-			align-items: center;
-			padding: 0 12px;
-			backdrop-filter: blur(6px);
-			background: rgba(20, 0, 30, 0.6);
-			z-index: 1001;
-		}
-
-		#topSearchBar input {
-			flex: 1;
-			padding: 10px 16px;
-			font-size: 16px;
-			border: none;
-			border-radius: 8px;
-			background: #32004f;
-			color: white;
-		}
-
-		#topSearchBar button {
-			margin-left: 8px;
-			padding: 10px 16px;
-			border: none;
-			border-radius: 8px;
-			background: #7b2cbf;
-			color: white;
-			font-size: 16px;
-			cursor: pointer;
-		}
-
-		#mainLayout {
-			margin-left: 70px;
-			margin-top: 50px;
-			flex: 1;
-			display: flex;
-			flex-direction: column;
-			height: calc(100vh - 50px);
-		}
-
-		#tabsWrapper {
-			background: #180028;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			padding: 6px 10px;
-		}
-
-		#tabs {
-			display: flex;
-			overflow-x: auto;
-		}
-
-		.tab {
-			background: #32004f;
-			color: white;
-			padding: 8px 14px;
-			border-radius: 8px 8px 0 0;
-			margin-right: 6px;
-			font-size: 14px;
-			display: flex;
-			align-items: center;
-			cursor: pointer;
-			white-space: nowrap;
-			user-select: none;
-		}
-
-		.tab.active {
-			background: #a44cd2;
-		}
-
-		.tab .close-btn {
-			margin-left: 10px;
-			cursor: pointer;
-			color: #ccc;
-			user-select: none;
-		}
-
-		#tabControls button {
-			background: #7b2cbf;
-			border: none;
-			border-radius: 6px;
-			padding: 6px 10px;
-			color: white;
-			font-size: 14px;
-			margin-left: 5px;
-			cursor: pointer;
-			user-select: none;
-			transition: background-color 0.3s;
-		}
-
-		#tabControls button:hover {
-			background: #9e43e5;
-		}
-
-		#mainContent {
-			flex: 1;
-			position: relative;
-			overflow: hidden;
-		}
-
-		iframe {
-			width: 100%;
-			height: 100%;
-			border: none;
-			display: none;
-		}
-
-		#homePage {
-			position: absolute;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-			background: transparent;
-			z-index: 500;
-			user-select: none;
-		}
-
-		#homePage h1 {
-			font-size: 64px;
-			margin-bottom: 30px;
-			color: #b86bff;
-			text-shadow: 0 0 12px #a44cd2;
-		}
-
-		#miniSearch {
-			display: flex;
-			gap: 10px;
-		}
-
-		#miniSearch input {
-			width: 300px;
-			padding: 12px 16px;
-			background: #32004f;
-			color: white;
-			border: none;
-			border-radius: 8px;
-			font-size: 16px;
-		}
-
-		#miniSearch button {
-			background: #7b2cbf;
-			color: white;
-			border: none;
-			border-radius: 8px;
-			padding: 12px 20px;
-			font-size: 16px;
-			cursor: pointer;
-			user-select: none;
-			transition: background-color 0.3s;
-		}
-
-		#miniSearch button:hover {
-			background: #9e43e5;
-		}
-	</style>
-</head>
-
-<body>
-	<div id="sidebar" aria-label="Sidebar navigation">
-		<button id="btnGames" title="Games" aria-label="Games"><i class="bi bi-joystick"></i></button>
-		<button id="btnChat" title="Chat" aria-label="Chat"><i class="bi bi-chat-dots"></i></button>
-		<button id="btnAI" title="AI" aria-label="AI"><i class="bi bi-robot"></i></button>
-		<button id="btnWeather" title="Weather" aria-label="Weather"><i class="bi bi-cloud-rain"></i></button>
-		<button id="btnSettings" title="Settings" aria-label="Settings"><i class="bi bi-gear"></i></button>
-		<button id="btnCredits" title="Credits" aria-label="Credits"><i class="bi bi-info-circle"></i></button>
-	</div>
-
-	<div id="topSearchBar">
-		<input type="text" id="topSearchInput" placeholder="Search or enter URL..." autocomplete="off" />
-		<button id="topSearchGo" aria-label="Go">Go</button>
-	</div>
-
-	<div id="mainLayout">
-		<div id="tabsWrapper">
-			<div id="tabs"></div>
-			<div id="tabControls">
-				<button id="backBtn" title="Back"><i class="bi bi-arrow-left"></i></button>
-				<button id="forwardBtn" title="Forward"><i class="bi bi-arrow-right"></i></button>
-				<button id="homeBtn" title="Home"><i class="bi bi-house"></i></button>
-				<button id="addTabBtn" title="New Tab">+</button>
-			</div>
-		</div>
-
-		<div id="mainContent">
-			<div id="homePage" role="main">
-				<h1>Auraa</h1>
-				<form id="miniSearch">
-					<input type="text" id="miniInput" placeholder="Search the web..." autocomplete="off" />
-					<button type="submit">Search</button>
-				</form>
-			</div>
-			<iframe id="tabView" title="Browser content"></iframe>
-		</div>
-	</div>
-
-	<script>
-		// Wait until UV proxy config is loaded before using it
-    function waitForUVConfig(callback) {
-      const check = () => {
-        if (typeof __uv$config !== "undefined") callback();
-        else setTimeout(check, 50);
-      };
-      check();
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Auraa</title>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+  />
+  <style>
+    /* Reset and base */
+    * {
+      box-sizing: border-box;
     }
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #2a003f, #000000);
+      color: #fff;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+    }
+    /* Sidebar */
+    #sidebar {
+      width: 70px;
+      background: #190028;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+      gap: 20px;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 1000;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    #sidebar button {
+      background: transparent;
+      border: none;
+      color: #c285ff;
+      font-size: 24px;
+      cursor: pointer;
+      border-radius: 12px;
+      padding: 10px;
+      transition: background 0.3s ease;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    #sidebar button:hover {
+      background: #7b2cbf;
+      color: white;
+    }
+    /* Top Search Bar */
+    #topSearchBar {
+      position: fixed;
+      top: 0;
+      left: 70px;
+      right: 0;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      background: rgba(20, 0, 30, 0.6);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index: 1001;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    #topSearchBar input {
+      flex: 1;
+      padding: 10px 16px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: #32004f;
+      color: white;
+      -webkit-user-select: text;
+      user-select: text;
+    }
+    #topSearchBar button {
+      margin-left: 8px;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      background: #7b2cbf;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    /* Main Layout */
+    #mainLayout {
+      margin-left: 70px;
+      margin-top: 50px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 50px);
+    }
+    #tabsWrapper {
+      background: #180028;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 10px;
+    }
+    #tabs {
+      display: flex;
+      overflow-x: auto;
+    }
+    .tab {
+      background: #32004f;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 8px 8px 0 0;
+      margin-right: 6px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      white-space: nowrap;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .tab.active {
+      background: #a44cd2;
+    }
+    .tab .close-btn {
+      margin-left: 10px;
+      cursor: pointer;
+      color: #ccc;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    #tabControls button {
+      background: #7b2cbf;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 10px;
+      color: white;
+      font-size: 14px;
+      margin-left: 5px;
+      cursor: pointer;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    /* Main Content */
+    #mainContent {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: none;
+    }
+    /* Home Page */
+    #homePage {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      z-index: 500;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    #homePage h1 {
+      font-size: 64px;
+      margin-bottom: 30px;
+      color: #b86bff;
+      text-shadow: 0 0 12px #a44cd2;
+      -webkit-user-select: text;
+      user-select: text;
+    }
+    #miniSearch {
+      display: flex;
+      gap: 10px;
+    }
+    #miniSearch input {
+      width: 300px;
+      padding: 12px 16px;
+      background: #32004f;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      -webkit-user-select: text;
+      user-select: text;
+    }
+    #miniSearch button {
+      background: #7b2cbf;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="sidebar" aria-label="Sidebar navigation">
+    <button title="Games" id="btnGames" aria-label="Games"><i class="bi bi-joystick"></i></button>
+    <button title="Chat" id="btnChat" aria-label="Chat"><i class="bi bi-chat-dots"></i></button>
+    <button title="AI" id="btnAI" aria-label="AI"><i class="bi bi-robot"></i></button>
+    <button title="Weather" id="btnWeather" aria-label="Weather"><i class="bi bi-cloud-rain"></i></button>
+    <button title="Settings" id="btnSettings" aria-label="Settings"><i class="bi bi-gear"></i></button>
+    <button title="Credits" id="btnCredits" aria-label="Credits"><i class="bi bi-info-circle"></i></button>
+  </div>
 
-    const tabs = document.getElementById("tabs");
-    const iframe = document.getElementById("tabView");
-    const homePage = document.getElementById("homePage");
-    const HOME_TITLE = "Home";
+  <div id="topSearchBar">
+    <input type="text" id="topSearchInput" placeholder="Search or enter URL..." autocomplete="off" />
+    <button id="topSearchGo" aria-label="Go">Go</button>
+  </div>
+
+  <div id="mainLayout">
+    <div id="tabsWrapper">
+      <div id="tabs"></div>
+      <div id="tabControls">
+        <button id="backBtn" title="Back"><i class="bi bi-arrow-left"></i></button>
+        <button id="forwardBtn" title="Forward"><i class="bi bi-arrow-right"></i></button>
+        <button id="homeBtn" title="Home"><i class="bi bi-house"></i></button>
+        <button id="addTabBtn" title="New Tab">+</button>
+      </div>
+    </div>
+
+    <div id="mainContent">
+      <div id="homePage" role="main">
+        <h1>Auraa<span class="dot">.</span></h1>
+        <form id="miniSearch">
+          <input type="text" id="miniInput" placeholder="Search the web..." autocomplete="off" />
+          <button type="submit">Search</button>
+        </form>
+      </div>
+      <iframe id="tabView" title="Browser content"></iframe>
+    </div>
+  </div>
+
+  <script>
+    function waitForUVConfig(callback) {
+      if (typeof __uv$config !== "undefined") {
+        callback();
+      } else {
+        setTimeout(() => waitForUVConfig(callback), 50);
+      }
+    }
 
     function createTab(title, src) {
       const tab = document.createElement("div");
       tab.className = "tab";
       tab.setAttribute("data-src", src);
-      tab.innerHTML = `<span class="tab-title">${title}</span><span class="close-btn" aria-label="Close tab">×</span>`;
+
+      const titleSpan = document.createElement("span");
+      titleSpan.className = "tab-title";
+      titleSpan.textContent = title;
+
+      const closeBtn = document.createElement("span");
+      closeBtn.className = "close-btn";
+      closeBtn.textContent = "×";
+
+      tab.appendChild(titleSpan);
+      tab.appendChild(closeBtn);
       return tab;
     }
 
@@ -284,8 +284,10 @@
       document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
       tabElement.classList.add("active");
       const src = tabElement.getAttribute("data-src");
+
       if (src === "home") {
         iframe.style.display = "none";
+        iframe.src = "";
         homePage.style.display = "flex";
       } else {
         homePage.style.display = "none";
@@ -296,7 +298,7 @@
 
     function openHomeTab() {
       tabs.innerHTML = "";
-      const homeTab = createTab(HOME_TITLE, "home");
+      const homeTab = createTab("Home", "home");
       homeTab.classList.add("active");
       tabs.appendChild(homeTab);
       switchTab(homeTab);
@@ -327,28 +329,37 @@
       const rawUrl = generateSearchUrl(url);
       const encoded = __uv$config.encodeUrl(rawUrl);
       const proxyUrl = __uv$config.prefix + encoded;
+
       tabElement.setAttribute('data-src', proxyUrl);
       tabElement.querySelector('.tab-title').textContent = url;
+
       iframe.src = proxyUrl;
       iframe.style.display = "block";
       homePage.style.display = "none";
+
       document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
       tabElement.classList.add("active");
     }
 
-    window.onload = function () {
+    waitForUVConfig(() => {
+      const tabs = document.getElementById("tabs");
+      const iframe = document.getElementById("tabView");
+      const homePage = document.getElementById("homePage");
+
       openHomeTab();
 
-      // Tab click handlers
-      tabs.addEventListener("click", e => {
+      tabs.addEventListener("click", function(e) {
         const target = e.target;
         if (target.classList.contains("close-btn")) {
           const tab = target.parentElement;
           const wasActive = tab.classList.contains("active");
           tab.remove();
           if (wasActive) {
-            if (tabs.children.length) switchTab(tabs.children[0]);
-            else openHomeTab();
+            if (tabs.children.length) {
+              switchTab(tabs.children[0]);
+            } else {
+              openHomeTab();
+            }
           }
         } else if (target.classList.contains("tab")) {
           switchTab(target);
@@ -357,84 +368,80 @@
         }
       });
 
-      // Top search bar
       document.getElementById("topSearchGo").onclick = () => {
-        const input = document.getElementById("topSearchInput");
-        const q = input.value.trim();
+        const q = document.getElementById("topSearchInput").value.trim();
         if (!q) return;
-        const tab = getActiveTab();
-        if (!tab) return;
-        loadInTab(q, tab);
-        input.value = "";
+        const activeTab = getActiveTab();
+        if (!activeTab) return;
+        loadInTab(q, activeTab);
+        setTimeout(() => {
+          document.getElementById("topSearchInput").value = "";
+        }, 100);
       };
 
-      document.getElementById("topSearchInput").addEventListener("keydown", e => {
+      document.getElementById("topSearchInput").addEventListener("keydown", function(e) {
         if (e.key === "Enter") {
           e.preventDefault();
           document.getElementById("topSearchGo").click();
         }
       });
 
-      // Mini search on home page
-      document.getElementById("miniSearch").addEventListener("submit", e => {
+      document.getElementById("miniSearch").addEventListener("submit", function(e) {
         e.preventDefault();
         const q = document.getElementById("miniInput").value.trim();
         if (!q) return;
-        const tab = getActiveTab();
-        if (!tab) return;
-        loadInTab(q, tab);
-        document.getElementById("miniInput").value = "";
+        const activeTab = getActiveTab();
+        if (!activeTab) return;
+        loadInTab(q, activeTab);
+        setTimeout(() => {
+          document.getElementById("miniInput").value = "";
+        }, 100);
       });
 
-      // Add new tab button
-      document.getElementById("addTabBtn").onclick = () => {
+      document.getElementById("addTabBtn").onclick = function() {
         const newTab = createTab("New Tab", "home");
+        document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
         tabs.appendChild(newTab);
         switchTab(newTab);
       };
 
-      // Back/Forward/Home buttons
-      document.getElementById("backBtn").onclick = () => {
+      document.getElementById("backBtn").onclick = function() {
         try {
           iframe.contentWindow.history.back();
         } catch {}
       };
 
-      document.getElementById("forwardBtn").onclick = () => {
+      document.getElementById("forwardBtn").onclick = function() {
         try {
           iframe.contentWindow.history.forward();
         } catch {}
       };
 
-      document.getElementById("homeBtn").onclick = () => {
+      document.getElementById("homeBtn").onclick = function() {
         openHomeTab();
       };
 
       // Sidebar buttons load local pages (no UV proxy)
-      const sidebarPages = {
-        btnGames: ["games.html", "Games"],
-        btnChat: ["auraachat.html", "Chat"],
-        btnAI: ["tideai.html", "AI"],
-        btnWeather: ["weather.html", "Weather"],
-        btnSettings: ["settings.html", "Settings"],
-        btnCredits: ["credits.html", "Credits"],
-      };
-      for (const id in sidebarPages) {
-        document.getElementById(id).onclick = () => {
-          const [page, title] = sidebarPages[id];
-          let sidebarTab = Array.from(tabs.children).find(t => t.getAttribute("data-src") === page);
-          if (!sidebarTab) {
-            sidebarTab = createTab(title, page);
-            tabs.appendChild(sidebarTab);
-          }
-          switchTab(sidebarTab);
-        };
+      document.getElementById("btnGames").onclick = () => loadSidebarPage("games.html", "Games");
+      document.getElementById("btnChat").onclick = () => loadSidebarPage("auraachat.html", "Chat");
+      document.getElementById("btnAI").onclick = () => loadSidebarPage("tideai.html", "AI");
+      document.getElementById("btnWeather").onclick = () => loadSidebarPage("weather.html", "Weather");
+      document.getElementById("btnSettings").onclick = () => loadSidebarPage("settings.html", "Settings");
+      document.getElementById("btnCredits").onclick = () => loadSidebarPage("credits.html", "Credits");
+
+      function loadSidebarPage(page, title) {
+        let sidebarTab = Array.from(tabs.children).find(t => t.getAttribute("data-src") === page);
+        if (!sidebarTab) {
+          sidebarTab = createTab(title, page);
+          tabs.appendChild(sidebarTab);
+        }
+        switchTab(sidebarTab);
       }
-    };
-	</script>
+    });
+  </script>
 
-	<script src="/active/uv/uv.bundle.js" defer></script>
-	<script src="/active/uv/uv.config.js" defer></script>
+  <!-- UV proxy scripts from GitHub via jsDelivr CDN -->
+  <script src="https://cdn.jsdelivr.net/gh/creatorcat70/Auraa2@main/active/uv/uv.bundle.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/gh/creatorcat70/Auraa2@main/active/uv/uv.config.js" defer></script>
 </body>
-
 </html>
