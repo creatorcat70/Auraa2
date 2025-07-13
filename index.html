@@ -9,10 +9,7 @@
     href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
   />
   <style>
-    /* Reset and base */
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
@@ -22,7 +19,6 @@
       overflow: hidden;
       display: flex;
     }
-    /* Sidebar */
     #sidebar {
       width: 70px;
       background: #190028;
@@ -36,8 +32,6 @@
       bottom: 0;
       left: 0;
       z-index: 1000;
-      -webkit-user-select: none;
-      user-select: none;
     }
     #sidebar button {
       background: transparent;
@@ -48,14 +42,11 @@
       border-radius: 12px;
       padding: 10px;
       transition: background 0.3s ease;
-      -webkit-user-select: none;
-      user-select: none;
     }
     #sidebar button:hover {
       background: #7b2cbf;
       color: white;
     }
-    /* Top Search Bar */
     #topSearchBar {
       position: fixed;
       top: 0;
@@ -67,10 +58,7 @@
       padding: 0 12px;
       background: rgba(20, 0, 30, 0.6);
       backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
       z-index: 1001;
-      -webkit-user-select: none;
-      user-select: none;
     }
     #topSearchBar input {
       flex: 1;
@@ -80,8 +68,6 @@
       border-radius: 8px;
       background: #32004f;
       color: white;
-      -webkit-user-select: text;
-      user-select: text;
     }
     #topSearchBar button {
       margin-left: 8px;
@@ -92,10 +78,7 @@
       color: white;
       font-size: 16px;
       cursor: pointer;
-      -webkit-user-select: none;
-      user-select: none;
     }
-    /* Main Layout */
     #mainLayout {
       margin-left: 70px;
       margin-top: 50px;
@@ -126,8 +109,6 @@
       align-items: center;
       cursor: pointer;
       white-space: nowrap;
-      -webkit-user-select: none;
-      user-select: none;
     }
     .tab.active {
       background: #a44cd2;
@@ -136,8 +117,6 @@
       margin-left: 10px;
       cursor: pointer;
       color: #ccc;
-      -webkit-user-select: none;
-      user-select: none;
     }
     #tabControls button {
       background: #7b2cbf;
@@ -148,10 +127,7 @@
       font-size: 14px;
       margin-left: 5px;
       cursor: pointer;
-      -webkit-user-select: none;
-      user-select: none;
     }
-    /* Main Content */
     #mainContent {
       flex: 1;
       position: relative;
@@ -163,7 +139,6 @@
       border: none;
       display: none;
     }
-    /* Home Page */
     #homePage {
       position: absolute;
       top: 0;
@@ -176,16 +151,12 @@
       justify-content: center;
       background: transparent;
       z-index: 500;
-      -webkit-user-select: none;
-      user-select: none;
     }
     #homePage h1 {
       font-size: 64px;
       margin-bottom: 30px;
       color: #b86bff;
       text-shadow: 0 0 12px #a44cd2;
-      -webkit-user-select: text;
-      user-select: text;
     }
     #miniSearch {
       display: flex;
@@ -199,8 +170,6 @@
       border: none;
       border-radius: 8px;
       font-size: 16px;
-      -webkit-user-select: text;
-      user-select: text;
     }
     #miniSearch button {
       background: #7b2cbf;
@@ -210,42 +179,39 @@
       padding: 12px 20px;
       font-size: 16px;
       cursor: pointer;
-      -webkit-user-select: none;
-      user-select: none;
     }
   </style>
 </head>
 <body>
-  <div id="sidebar" aria-label="Sidebar navigation">
-    <button title="Games" id="btnGames" aria-label="Games"><i class="bi bi-joystick"></i></button>
-    <button title="Chat" id="btnChat" aria-label="Chat"><i class="bi bi-chat-dots"></i></button>
-    <button title="AI" id="btnAI" aria-label="AI"><i class="bi bi-robot"></i></button>
-    <button title="Weather" id="btnWeather" aria-label="Weather"><i class="bi bi-cloud-rain"></i></button>
-    <button title="Settings" id="btnSettings" aria-label="Settings"><i class="bi bi-gear"></i></button>
-    <button title="Credits" id="btnCredits" aria-label="Credits"><i class="bi bi-info-circle"></i></button>
+  <div id="sidebar">
+    <button id="btnGames" title="Games"><i class="bi bi-joystick"></i></button>
+    <button id="btnChat" title="Chat"><i class="bi bi-chat-dots"></i></button>
+    <button id="btnAI" title="AI"><i class="bi bi-robot"></i></button>
+    <button id="btnWeather" title="Weather"><i class="bi bi-cloud-rain"></i></button>
+    <button id="btnSettings" title="Settings"><i class="bi bi-gear"></i></button>
+    <button id="btnCredits" title="Credits"><i class="bi bi-info-circle"></i></button>
   </div>
 
   <div id="topSearchBar">
-    <input type="text" id="topSearchInput" placeholder="Search or enter URL..." autocomplete="off" />
-    <button id="topSearchGo" aria-label="Go">Go</button>
+    <input type="text" id="topSearchInput" placeholder="Search or enter URL..." />
+    <button id="topSearchGo">Go</button>
   </div>
 
   <div id="mainLayout">
     <div id="tabsWrapper">
       <div id="tabs"></div>
       <div id="tabControls">
-        <button id="backBtn" title="Back"><i class="bi bi-arrow-left"></i></button>
-        <button id="forwardBtn" title="Forward"><i class="bi bi-arrow-right"></i></button>
-        <button id="homeBtn" title="Home"><i class="bi bi-house"></i></button>
-        <button id="addTabBtn" title="New Tab">+</button>
+        <button id="backBtn"><i class="bi bi-arrow-left"></i></button>
+        <button id="forwardBtn"><i class="bi bi-arrow-right"></i></button>
+        <button id="homeBtn"><i class="bi bi-house"></i></button>
+        <button id="addTabBtn">+</button>
       </div>
     </div>
-
     <div id="mainContent">
-      <div id="homePage" role="main">
+      <div id="homePage">
         <h1>Auraa<span class="dot">.</span></h1>
         <form id="miniSearch">
-          <input type="text" id="miniInput" placeholder="Search the web..." autocomplete="off" />
+          <input type="text" id="miniInput" placeholder="Search the web..." />
           <button type="submit">Search</button>
         </form>
       </div>
@@ -254,6 +220,8 @@
   </div>
 
   <script>
+    let iframe, homePage, tabs;
+
     function waitForUVConfig(callback) {
       if (typeof __uv$config !== "undefined") {
         callback();
@@ -342,9 +310,9 @@
     }
 
     waitForUVConfig(() => {
-      const tabs = document.getElementById("tabs");
-      const iframe = document.getElementById("tabView");
-      const homePage = document.getElementById("homePage");
+      tabs = document.getElementById("tabs");
+      iframe = document.getElementById("tabView");
+      homePage = document.getElementById("homePage");
 
       openHomeTab();
 
@@ -374,9 +342,7 @@
         const activeTab = getActiveTab();
         if (!activeTab) return;
         loadInTab(q, activeTab);
-        setTimeout(() => {
-          document.getElementById("topSearchInput").value = "";
-        }, 100);
+        setTimeout(() => document.getElementById("topSearchInput").value = "", 100);
       };
 
       document.getElementById("topSearchInput").addEventListener("keydown", function(e) {
@@ -393,9 +359,7 @@
         const activeTab = getActiveTab();
         if (!activeTab) return;
         loadInTab(q, activeTab);
-        setTimeout(() => {
-          document.getElementById("miniInput").value = "";
-        }, 100);
+        setTimeout(() => document.getElementById("miniInput").value = "", 100);
       });
 
       document.getElementById("addTabBtn").onclick = function() {
@@ -405,23 +369,16 @@
         switchTab(newTab);
       };
 
-      document.getElementById("backBtn").onclick = function() {
-        try {
-          iframe.contentWindow.history.back();
-        } catch {}
+      document.getElementById("backBtn").onclick = () => {
+        try { iframe.contentWindow.history.back(); } catch {}
       };
 
-      document.getElementById("forwardBtn").onclick = function() {
-        try {
-          iframe.contentWindow.history.forward();
-        } catch {}
+      document.getElementById("forwardBtn").onclick = () => {
+        try { iframe.contentWindow.history.forward(); } catch {}
       };
 
-      document.getElementById("homeBtn").onclick = function() {
-        openHomeTab();
-      };
+      document.getElementById("homeBtn").onclick = () => openHomeTab();
 
-      // Sidebar buttons load local pages (no UV proxy)
       document.getElementById("btnGames").onclick = () => loadSidebarPage("games.html", "Games");
       document.getElementById("btnChat").onclick = () => loadSidebarPage("auraachat.html", "Chat");
       document.getElementById("btnAI").onclick = () => loadSidebarPage("tideai.html", "AI");
@@ -440,7 +397,6 @@
     });
   </script>
 
-  <!-- UV proxy scripts from GitHub via jsDelivr CDN -->
   <script src="https://cdn.jsdelivr.net/gh/creatorcat70/Auraa2@main/active/uv/uv.bundle.js" defer></script>
   <script src="https://cdn.jsdelivr.net/gh/creatorcat70/Auraa2@main/active/uv/uv.config.js" defer></script>
 </body>
