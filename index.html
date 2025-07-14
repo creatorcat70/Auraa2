@@ -41,17 +41,21 @@
       border-radius: 8px;
       background: #4f0032;
       color: white;
-      width: 300px;
+      width: 280px;
     }
 
-    #searchForm button {
+    #searchForm button,
+    .navBtn,
+    #homeBtn {
       background: #c02c8f;
       color: white;
       border: none;
       border-radius: 8px;
-      padding: 10px 20px;
+      padding: 8px 12px;
       font-size: 16px;
       cursor: pointer;
+      display: flex;
+      align-items: center;
     }
 
     .options {
@@ -61,12 +65,7 @@
 
     #homeBtn {
       background: #4f0032;
-      border: none;
       color: #ff85e1;
-      border-radius: 8px;
-      padding: 8px 16px;
-      font-size: 14px;
-      cursor: pointer;
     }
 
     .sidebar {
@@ -148,6 +147,11 @@
       bottom: 0;
       width: 100%;
     }
+
+    .navControls {
+      display: flex;
+      gap: 8px;
+    }
   </style>
 </head>
 <body>
@@ -170,7 +174,12 @@
       </div>
       <button type="submit">Search</button>
     </form>
-    <button id="homeBtn" onclick="location.href='index.html'">Home</button>
+    <div class="navControls">
+      <button class="navBtn" id="backBtn" title="Back"><i class="bi bi-arrow-left"></i></button>
+      <button class="navBtn" id="forwardBtn" title="Forward"><i class="bi bi-arrow-right"></i></button>
+      <button class="navBtn" id="refreshBtn" title="Refresh"><i class="bi bi-arrow-clockwise"></i></button>
+      <button id="homeBtn" onclick="location.href='index.html'">Home</button>
+    </div>
   </div>
 
   <h1 class="title" id="mainTitle">Auraa<span class="dot">.</span></h1>
@@ -214,7 +223,8 @@
         win.document.body.style.margin = "0";
         win.document.body.appendChild(iframe);
       } else {
-        document.getElementById("proxyFrame").src = finalUrl;
+        const proxyFrame = document.getElementById("proxyFrame");
+        proxyFrame.src = finalUrl;
         document.getElementById("mainTitle").classList.add("hidden");
       }
 
@@ -254,9 +264,22 @@
       setInterval(updateTime, 1000);
       updateTime();
 
+      // Setup search handler
       waitForUVConfig(() => {
         document.getElementById("searchForm").addEventListener("submit", searchHandler);
       });
+
+      // Navigation buttons
+      const frame = document.getElementById("proxyFrame");
+      document.getElementById("backBtn").onclick = () => {
+        try { frame.contentWindow.history.back(); } catch {}
+      };
+      document.getElementById("forwardBtn").onclick = () => {
+        try { frame.contentWindow.history.forward(); } catch {}
+      };
+      document.getElementById("refreshBtn").onclick = () => {
+        try { frame.contentWindow.location.reload(); } catch {}
+      };
     };
   </script>
 </body>
