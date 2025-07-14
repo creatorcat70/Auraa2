@@ -4,36 +4,101 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Auraa</title>
-  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
       background: linear-gradient(135deg, #3a002a, #0c001c);
       color: #fff;
-      height: 100vh;
       overflow: hidden;
+    }
+
+    .bubbles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .bubbles div {
+      position: absolute;
+      background: rgba(255, 133, 225, 0.2);
+      border-radius: 50%;
+      animation: float 20s infinite ease-in-out;
+    }
+
+    .container {
       display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 80px;
+    }
+
+    .title {
+      font-size: 64px;
+      font-weight: bold;
+      background: linear-gradient(90deg, #ff7ce5, #c02c8f);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 20px;
+    }
+
+    .dot {
+      color: #ff85e1;
+    }
+
+    form#searchForm {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    form#searchForm input[type="text"] {
+      padding: 12px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: #4f0032;
+      color: white;
+      width: 300px;
+    }
+
+    form#searchForm button {
+      background: #c02c8f;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .options {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #ff85e1;
     }
 
     .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
       width: 70px;
       background: #2a001c;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 20px 0;
       gap: 20px;
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      z-index: 1000;
+      padding: 20px 0;
     }
 
     .sidebar button {
@@ -59,57 +124,6 @@
       color: #ff85e1;
     }
 
-    #mainLayout {
-      margin-left: 70px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-    }
-
-    #topSearchBar {
-      height: 50px;
-      display: flex;
-      align-items: center;
-      padding: 0 12px;
-      background: rgba(40, 0, 30, 0.6);
-      backdrop-filter: blur(6px);
-      z-index: 1001;
-    }
-
-    #topSearchBar input {
-      flex: 1;
-      padding: 10px 16px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      background: #4f0032;
-      color: white;
-    }
-
-    #topSearchBar button {
-      margin-left: 8px;
-      padding: 10px 16px;
-      border: none;
-      border-radius: 8px;
-      background: #c02c8f;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    #iframeContainer {
-      flex: 1;
-      position: relative;
-      background: #0c001c;
-    }
-
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-
     .footer {
       text-align: center;
       padding: 10px;
@@ -118,110 +132,66 @@
       color: #ff85e1;
     }
 
-    .gradient-title {
-      text-align: center;
-      font-size: 48px;
-      font-weight: bold;
-      background: linear-gradient(90deg, #ff7ce5, #c02c8f, #ff7ce5);
-      background-size: 200% auto;
-      color: transparent;
-      background-clip: text;
-      -webkit-background-clip: text;
-      animation: shine 5s linear infinite;
-      margin: 20px 0;
-    }
-
-    @keyframes shine {
-      to {
-        background-position: 200% center;
-      }
-    }
-
-    #mainSearch {
+    #iframeContainer {
+      margin-top: 20px;
+      width: 100%;
+      height: 60vh;
       display: flex;
       justify-content: center;
-      align-items: center;
-      gap: 10px;
-      padding: 10px;
-      background: rgba(40, 0, 30, 0.6);
     }
 
-    #mainSearch input {
-      width: 40%;
-      padding: 10px 16px;
+    iframe {
+      width: 80%;
+      height: 100%;
       border: none;
-      border-radius: 8px;
-      background: #4f0032;
-      color: white;
-      font-size: 16px;
-    }
-
-    #mainSearch button {
-      padding: 10px 20px;
-      background: #c02c8f;
-      border: none;
-      border-radius: 8px;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    #mainSearch label {
-      display: flex;
-      align-items: center;
-      color: #ff85e1;
-      gap: 5px;
-      font-size: 14px;
+      border-radius: 12px;
     }
   </style>
 </head>
 <body>
-  <div class="sidebar">
-    <button onclick="loadPage('games.html')" title="Games"><i class="bi bi-joystick"></i></button>
-    <button onclick="loadPage('movies.html')" title="Movies"><i class="bi bi-film"></i></button>
-    <button onclick="loadPage('tidechat.html')" title="Chat"><i class="bi bi-chat-dots"></i></button>
-    <button onclick="loadPage('credits.html')" title="Credits"><i class="bi bi-info-circle"></i></button>
-    <div class="sidebar-info">
-      <span id="battery">⚡</span><br>
-      <span id="time">⌚</span>
-    </div>
+  <div class="bubbles">
+    <div></div><div></div><div></div><div></div><div></div>
   </div>
 
-  <div id="mainLayout">
-    <div id="topSearchBar">
-      <button onclick="goBack()" title="Back"><i class="bi bi-arrow-left"></i></button>
-      <button onclick="goForward()" title="Forward"><i class="bi bi-arrow-right"></i></button>
-      <button onclick="goHome()" title="Home"><i class="bi bi-house"></i></button>
-      <input type="text" id="topInput" placeholder="Search or URL..." />
-      <button onclick="handleSearch('topInput')">Go</button>
+  <div id="mainContent">
+    <div id="loader" class="loader" style="display:none;">Loading...</div>
+
+    <div class="container" id="content">
+      <h1 class="title">Auraa<span class="dot">.</span></h1>
+
+      <form id="searchForm">
+        <input type="text" id="urlInput" placeholder="Surf the Web..." autocomplete="off" />
+        <div class="options">
+          <label><input type="checkbox" id="blankMode" /> Stealth (about:blank)</label>
+        </div>
+        <button type="submit">Search</button>
+      </form>
+
+      <div id="iframeContainer">
+        <iframe id="proxyFrame" title="Proxy View"></iframe>
+      </div>
     </div>
 
-    <div class="gradient-title">Auraa<span class="dot">.</span></div>
-
-    <form id="mainSearch" onsubmit="handleSearch('mainInput'); return false;">
-      <input type="text" id="mainInput" placeholder="Search the web..." />
-      <label><input type="checkbox" id="blankMode" /> Cloak</label>
-      <button type="submit">Surf 🌊</button>
-    </form>
-
-    <div id="iframeContainer">
-      <iframe id="proxyFrame" src=""></iframe>
+    <div class="sidebar">
+      <button onclick="loadPage('games.html');"><i class="bi bi-joystick"></i></button>
+      <button onclick="loadPage('movies.html');"><i class="bi bi-film"></i></button>
+      <button onclick="loadPage('tidechat.html');"><i class="bi bi-chat-dots"></i></button>
+      <button onclick="loadPage('tideai.html');"><i class="bi bi-robot"></i></button>
+      <button onclick="loadPage('settings.html');"><i class="bi bi-gear"></i></button>
+      <button onclick="loadPage('credits.html');"><i class="bi bi-info-circle"></i></button>
+      <div class="sidebar-info">
+        <span id="battery">⚡</span><br>
+        <span id="time">⌚</span>
+      </div>
     </div>
 
     <div class="footer">Auraa | By Mizzery</div>
   </div>
 
-  <script src="/uv/uv.bundle.js"></script>
-  <script src="/uv/uv.config.js"></script>
+  <script src="/active/uv/uv.bundle.js" defer></script>
+  <script src="/active/uv/uv.config.js" defer></script>
+  <script src="/assets/js/register.js" defer></script>
   <script>
-    function waitForUV(callback) {
-      const check = () => {
-        if (typeof __uv$config !== "undefined") callback();
-        else setTimeout(check, 20);
-      };
-      check();
-    }
-
     function generateURL(query) {
       try {
         const url = new URL(query);
@@ -235,42 +205,26 @@
       return `https://duckduckgo.com/?q=${encodeURIComponent(query)}`;
     }
 
-    function handleSearch(inputId) {
-      const input = document.getElementById(inputId).value.trim();
-      if (!input) return;
+    function searchHandler(e) {
+      e.preventDefault();
+      const input = document.getElementById("urlInput");
+      const value = input.value.trim();
+      if (!value) return;
 
-      const url = generateURL(input);
-      const encoded = __uv$config.encodeUrl(url);
-      const finalUrl = __uv$config.prefix + encoded;
+      const finalUrl = __uv$config.prefix + __uv$config.encodeUrl(generateURL(value));
 
-      if (document.getElementById("blankMode").checked && inputId === "mainInput") {
+      if (document.getElementById("blankMode").checked) {
         const win = window.open("about:blank", "_blank");
-        const frame = win.document.createElement("iframe");
-        frame.style = "border:none;width:100vw;height:100vh;";
-        frame.src = finalUrl;
+        const iframe = win.document.createElement("iframe");
+        iframe.style = "border:none;width:100vw;height:100vh;";
+        iframe.src = finalUrl;
         win.document.body.style.margin = "0";
-        win.document.body.appendChild(frame);
+        win.document.body.appendChild(iframe);
       } else {
         document.getElementById("proxyFrame").src = finalUrl;
       }
 
-      document.getElementById(inputId).value = "";
-    }
-
-    function goHome() {
-      document.getElementById("proxyFrame").src = "";
-    }
-
-    function goBack() {
-      try {
-        document.getElementById("proxyFrame").contentWindow.history.back();
-      } catch {}
-    }
-
-    function goForward() {
-      try {
-        document.getElementById("proxyFrame").contentWindow.history.forward();
-      } catch {}
+      input.value = "";
     }
 
     function loadPage(path) {
@@ -278,26 +232,27 @@
     }
 
     window.onload = function () {
-      waitForUV(() => {
-        // Battery
-        if (navigator.getBattery) {
-          navigator.getBattery().then(battery => {
-            function updateBattery() {
-              document.getElementById("battery").textContent = `${Math.round(battery.level * 100)}% ⚡`;
-            }
-            updateBattery();
-            battery.addEventListener("levelchange", updateBattery);
-          });
-        }
+      // Battery
+      if (navigator.getBattery) {
+        navigator.getBattery().then(battery => {
+          function updateBattery() {
+            document.getElementById("battery").textContent = `${Math.round(battery.level * 100)}% ⚡`;
+          }
+          updateBattery();
+          battery.addEventListener("levelchange", updateBattery);
+        });
+      }
 
-        // Time
-        function updateTime() {
-          const now = new Date();
-          document.getElementById("time").textContent = now.toLocaleTimeString();
-        }
-        setInterval(updateTime, 1000);
-        updateTime();
-      });
+      // Time
+      function updateTime() {
+        const now = new Date();
+        document.getElementById("time").textContent = now.toLocaleTimeString();
+      }
+      setInterval(updateTime, 1000);
+      updateTime();
+
+      // Search submit
+      document.getElementById("searchForm").addEventListener("submit", searchHandler);
     };
   </script>
 </body>
