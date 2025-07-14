@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tide</title>
-  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <title>Auraa</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
   <style>
     * {
@@ -118,32 +118,64 @@
       color: #ff85e1;
     }
 
-    .bubbles > div {
-      position: absolute;
-      background: #ff85e1;
-      border-radius: 50%;
-      opacity: 0.3;
-      animation: float 6s infinite ease-in-out;
+    .gradient-title {
+      text-align: center;
+      font-size: 48px;
+      font-weight: bold;
+      background: linear-gradient(90deg, #ff7ce5, #c02c8f, #ff7ce5);
+      background-size: 200% auto;
+      color: transparent;
+      background-clip: text;
+      -webkit-background-clip: text;
+      animation: shine 5s linear infinite;
+      margin: 20px 0;
     }
 
-    @keyframes float {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-20px); }
-      100% { transform: translateY(0); }
+    @keyframes shine {
+      to {
+        background-position: 200% center;
+      }
     }
 
-    .bubbles > div:nth-child(1) { width: 20px; height: 20px; left: 10%; top: 80%; }
-    .bubbles > div:nth-child(2) { width: 30px; height: 30px; left: 30%; top: 90%; }
-    .bubbles > div:nth-child(3) { width: 15px; height: 15px; left: 50%; top: 85%; }
-    .bubbles > div:nth-child(4) { width: 25px; height: 25px; left: 70%; top: 92%; }
-    .bubbles > div:nth-child(5) { width: 18px; height: 18px; left: 85%; top: 88%; }
+    #mainSearch {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      background: rgba(40, 0, 30, 0.6);
+    }
+
+    #mainSearch input {
+      width: 40%;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      background: #4f0032;
+      color: white;
+      font-size: 16px;
+    }
+
+    #mainSearch button {
+      padding: 10px 20px;
+      background: #c02c8f;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #mainSearch label {
+      display: flex;
+      align-items: center;
+      color: #ff85e1;
+      gap: 5px;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
-  <div class="bubbles">
-    <div></div><div></div><div></div><div></div><div></div>
-  </div>
-
   <div class="sidebar">
     <button onclick="loadPage('games.html')" title="Games"><i class="bi bi-joystick"></i></button>
     <button onclick="loadPage('movies.html')" title="Movies"><i class="bi bi-film"></i></button>
@@ -160,15 +192,23 @@
       <button onclick="goBack()" title="Back"><i class="bi bi-arrow-left"></i></button>
       <button onclick="goForward()" title="Forward"><i class="bi bi-arrow-right"></i></button>
       <button onclick="goHome()" title="Home"><i class="bi bi-house"></i></button>
-      <input type="text" id="urlInput" placeholder="Surf the Web..." autocomplete="off" />
-      <button onclick="handleSearch()">Surf 🌊</button>
+      <input type="text" id="topInput" placeholder="Search or URL..." />
+      <button onclick="handleSearch('topInput')">Go</button>
     </div>
+
+    <div class="gradient-title">Auraa<span class="dot">.</span></div>
+
+    <form id="mainSearch" onsubmit="handleSearch('mainInput'); return false;">
+      <input type="text" id="mainInput" placeholder="Search the web..." />
+      <label><input type="checkbox" id="blankMode" /> Cloak</label>
+      <button type="submit">Surf 🌊</button>
+    </form>
 
     <div id="iframeContainer">
       <iframe id="proxyFrame" src=""></iframe>
     </div>
 
-    <div class="footer">Tide | By Mizzery</div>
+    <div class="footer">Auraa | By Mizzery</div>
   </div>
 
   <script src="/uv/uv.bundle.js"></script>
@@ -182,14 +222,6 @@
       check();
     }
 
-    function handleSearch() {
-      const input = document.getElementById("urlInput").value.trim();
-      if (!input) return;
-      const url = generateURL(input);
-      const encoded = __uv$config.encodeUrl(url);
-      document.getElementById("proxyFrame").src = __uv$config.prefix + encoded;
-    }
-
     function generateURL(query) {
       try {
         const url = new URL(query);
@@ -201,6 +233,28 @@
         } catch {}
       }
       return `https://duckduckgo.com/?q=${encodeURIComponent(query)}`;
+    }
+
+    function handleSearch(inputId) {
+      const input = document.getElementById(inputId).value.trim();
+      if (!input) return;
+
+      const url = generateURL(input);
+      const encoded = __uv$config.encodeUrl(url);
+      const finalUrl = __uv$config.prefix + encoded;
+
+      if (document.getElementById("blankMode").checked && inputId === "mainInput") {
+        const win = window.open("about:blank", "_blank");
+        const frame = win.document.createElement("iframe");
+        frame.style = "border:none;width:100vw;height:100vh;";
+        frame.src = finalUrl;
+        win.document.body.style.margin = "0";
+        win.document.body.appendChild(frame);
+      } else {
+        document.getElementById("proxyFrame").src = finalUrl;
+      }
+
+      document.getElementById(inputId).value = "";
     }
 
     function goHome() {
