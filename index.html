@@ -70,158 +70,149 @@
   <script src="/active/uv/uv.config.js" onload="startApp()"></script>
   <script>
     function startApp() {
-      window.onload = function () {
-        const iframe = document.getElementById('tabView');
-        const homePage = document.getElementById('homePage');
-        const tabs = document.getElementById('tabs');
+      const iframe = document.getElementById('tabView');
+      const homePage = document.getElementById('homePage');
+      const tabs = document.getElementById('tabs');
 
-        function createTab(title, src) {
-          const tab = document.createElement("div");
-          tab.className = "tab";
-          tab.setAttribute("data-src", src);
+      function createTab(title, src) {
+        const tab = document.createElement("div");
+        tab.className = "tab";
+        tab.setAttribute("data-src", src);
+        const titleSpan = document.createElement("span");
+        titleSpan.className = "tab-title";
+        titleSpan.textContent = title;
+        const closeBtn = document.createElement("span");
+        closeBtn.className = "close-btn";
+        closeBtn.textContent = "×";
+        tab.appendChild(titleSpan);
+        tab.appendChild(closeBtn);
+        return tab;
+      }
 
-          const titleSpan = document.createElement("span");
-          titleSpan.className = "tab-title";
-          titleSpan.textContent = title;
-
-          const closeBtn = document.createElement("span");
-          closeBtn.className = "close-btn";
-          closeBtn.textContent = "×";
-
-          tab.appendChild(titleSpan);
-          tab.appendChild(closeBtn);
-          return tab;
-        }
-
-        function switchTab(tabElement) {
-          document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-          tabElement.classList.add("active");
-          const src = tabElement.getAttribute("data-src");
-
-          if (src === "home") {
-            iframe.style.display = "none";
-            iframe.src = "";
-            homePage.style.display = "flex";
-          } else {
-            homePage.style.display = "none";
-            iframe.style.display = "block";
-            iframe.src = src;
-          }
-        }
-
-        function openHomeTab() {
-          tabs.innerHTML = "";
-          const homeTab = createTab("Home", "home");
-          homeTab.classList.add("active");
-          tabs.appendChild(homeTab);
-          switchTab(homeTab);
-        }
-
-        function getActiveTab() {
-          return document.querySelector(".tab.active");
-        }
-
-        function generateSearchUrl(query) {
-          try {
-            const url = new URL(query);
-            return url.toString();
-          } catch {
-            try {
-              const url = new URL(`https://${query}`);
-              if (url.hostname.includes('.')) return url.toString();
-            } catch {}
-          }
-          return `https://duckduckgo.com/search?q=${encodeURIComponent(query)}&source=web`;
-        }
-
-        function loadInTab(url, tabElement) {
-          const rawUrl = generateSearchUrl(url);
-          const encoded = __uv$config.encodeUrl(rawUrl);
-          const proxyUrl = __uv$config.prefix + encoded;
-
-          tabElement.setAttribute('data-src', proxyUrl);
-          tabElement.querySelector('.tab-title').textContent = url;
-
-          iframe.src = proxyUrl;
-          iframe.style.display = "block";
+      function switchTab(tabElement) {
+        document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+        tabElement.classList.add("active");
+        const src = tabElement.getAttribute("data-src");
+        if (src === "home") {
+          iframe.style.display = "none";
+          iframe.src = "";
+          homePage.style.display = "flex";
+        } else {
           homePage.style.display = "none";
-
-          document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-          tabElement.classList.add("active");
+          iframe.style.display = "block";
+          iframe.src = src;
         }
+      }
 
-        openHomeTab();
+      function openHomeTab() {
+        tabs.innerHTML = "";
+        const homeTab = createTab("Home", "home");
+        homeTab.classList.add("active");
+        tabs.appendChild(homeTab);
+        switchTab(homeTab);
+      }
 
-        tabs.addEventListener("click", function (e) {
-          const target = e.target;
-          if (target.classList.contains("close-btn")) {
-            const tab = target.parentElement;
-            const wasActive = tab.classList.contains("active");
-            tab.remove();
-            if (wasActive) {
-              if (tabs.children.length) {
-                switchTab(tabs.children[0]);
-              } else {
-                openHomeTab();
-              }
+      function getActiveTab() {
+        return document.querySelector(".tab.active");
+      }
+
+      function generateSearchUrl(query) {
+        try {
+          const url = new URL(query);
+          return url.toString();
+        } catch {
+          try {
+            const url = new URL(`https://${query}`);
+            if (url.hostname.includes('.')) return url.toString();
+          } catch {}
+        }
+        return `https://duckduckgo.com/search?q=${encodeURIComponent(query)}&source=web`;
+      }
+
+      function loadInTab(url, tabElement) {
+        const rawUrl = generateSearchUrl(url);
+        const encoded = __uv$config.encodeUrl(rawUrl);
+        const proxyUrl = __uv$config.prefix + encoded;
+        tabElement.setAttribute('data-src', proxyUrl);
+        tabElement.querySelector('.tab-title').textContent = url;
+        iframe.src = proxyUrl;
+        iframe.style.display = "block";
+        homePage.style.display = "none";
+        document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+        tabElement.classList.add("active");
+      }
+
+      openHomeTab();
+
+      tabs.addEventListener("click", function (e) {
+        const target = e.target;
+        if (target.classList.contains("close-btn")) {
+          const tab = target.parentElement;
+          const wasActive = tab.classList.contains("active");
+          tab.remove();
+          if (wasActive) {
+            if (tabs.children.length) {
+              switchTab(tabs.children[0]);
+            } else {
+              openHomeTab();
             }
-          } else if (target.classList.contains("tab")) {
-            switchTab(target);
-          } else if (target.parentElement && target.parentElement.classList.contains("tab")) {
-            switchTab(target.parentElement);
           }
-        });
+        } else if (target.classList.contains("tab")) {
+          switchTab(target);
+        } else if (target.parentElement && target.parentElement.classList.contains("tab")) {
+          switchTab(target.parentElement);
+        }
+      });
 
-        document.getElementById("topSearchGo").onclick = () => {
-          const q = document.getElementById("topSearchInput").value.trim();
-          if (!q) return;
-          const activeTab = getActiveTab();
-          if (!activeTab) return;
-          loadInTab(q, activeTab);
-          setTimeout(() => document.getElementById("topSearchInput").value = "", 100);
-        };
-
-        document.getElementById("topSearchInput").addEventListener("keydown", function(e) {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            document.getElementById("topSearchGo").click();
-          }
-        });
-
-        document.getElementById("miniSearch").addEventListener("submit", function(e) {
-          e.preventDefault();
-          const q = document.getElementById("miniInput").value.trim();
-          if (!q) return;
-          const activeTab = getActiveTab();
-          if (!activeTab) return;
-          loadInTab(q, activeTab);
-          setTimeout(() => document.getElementById("miniInput").value = "", 100);
-        });
-
-        document.getElementById("addTabBtn").onclick = function () {
-          const newTab = createTab("New Tab", "home");
-          document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-          tabs.appendChild(newTab);
-          switchTab(newTab);
-        };
-
-        document.getElementById("backBtn").onclick = () => {
-          try { iframe.contentWindow.history.back(); } catch {}
-        };
-
-        document.getElementById("forwardBtn").onclick = () => {
-          try { iframe.contentWindow.history.forward(); } catch {}
-        };
-
-        document.getElementById("homeBtn").onclick = () => openHomeTab();
-
-        document.getElementById("btnGames").onclick = () => loadInTab("games.html", getActiveTab());
-        document.getElementById("btnChat").onclick = () => loadInTab("auraachat.html", getActiveTab());
-        document.getElementById("btnAI").onclick = () => loadInTab("tideai.html", getActiveTab());
-        document.getElementById("btnWeather").onclick = () => loadInTab("weather.html", getActiveTab());
-        document.getElementById("btnSettings").onclick = () => loadInTab("settings.html", getActiveTab());
-        document.getElementById("btnCredits").onclick = () => loadInTab("credits.html", getActiveTab());
+      document.getElementById("topSearchGo").onclick = () => {
+        const q = document.getElementById("topSearchInput").value.trim();
+        if (!q) return;
+        const activeTab = getActiveTab();
+        if (!activeTab) return;
+        loadInTab(q, activeTab);
+        setTimeout(() => document.getElementById("topSearchInput").value = "", 100);
       };
+
+      document.getElementById("topSearchInput").addEventListener("keydown", function(e) {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          document.getElementById("topSearchGo").click();
+        }
+      });
+
+      document.getElementById("miniSearch").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const q = document.getElementById("miniInput").value.trim();
+        if (!q) return;
+        const activeTab = getActiveTab();
+        if (!activeTab) return;
+        loadInTab(q, activeTab);
+        setTimeout(() => document.getElementById("miniInput").value = "", 100);
+      });
+
+      document.getElementById("addTabBtn").onclick = function () {
+        const newTab = createTab("New Tab", "home");
+        document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+        tabs.appendChild(newTab);
+        switchTab(newTab);
+      };
+
+      document.getElementById("backBtn").onclick = () => {
+        try { iframe.contentWindow.history.back(); } catch {}
+      };
+
+      document.getElementById("forwardBtn").onclick = () => {
+        try { iframe.contentWindow.history.forward(); } catch {}
+      };
+
+      document.getElementById("homeBtn").onclick = () => openHomeTab();
+
+      document.getElementById("btnGames").onclick = () => loadInTab("games.html", getActiveTab());
+      document.getElementById("btnChat").onclick = () => loadInTab("auraachat.html", getActiveTab());
+      document.getElementById("btnAI").onclick = () => loadInTab("tideai.html", getActiveTab());
+      document.getElementById("btnWeather").onclick = () => loadInTab("weather.html", getActiveTab());
+      document.getElementById("btnSettings").onclick = () => loadInTab("settings.html", getActiveTab());
+      document.getElementById("btnCredits").onclick = () => loadInTab("credits.html", getActiveTab());
     }
   </script>
 </body>
