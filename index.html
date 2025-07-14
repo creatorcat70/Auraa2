@@ -15,53 +15,27 @@
       overflow: hidden;
     }
 
-    .bubbles {
+    .topBar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background: rgba(20, 0, 20, 0.7);
       position: fixed;
       top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: -1;
+      left: 70px;
+      right: 0;
+      z-index: 10;
     }
 
-    .bubbles div {
-      position: absolute;
-      background: rgba(255, 133, 225, 0.2);
-      border-radius: 50%;
-      animation: float 20s infinite ease-in-out;
-    }
-
-    .container {
+    #searchForm {
       display: flex;
-      flex-direction: column;
       align-items: center;
-      padding-top: 80px;
+      gap: 10px;
     }
 
-    .title {
-      font-size: 64px;
-      font-weight: bold;
-      background: linear-gradient(90deg, #ff7ce5, #c02c8f);
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-      margin-bottom: 20px;
-    }
-
-    .dot {
-      color: #ff85e1;
-    }
-
-    form#searchForm {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-    }
-
-    form#searchForm input[type="text"] {
-      padding: 12px 20px;
+    #urlInput {
+      padding: 10px 16px;
       font-size: 16px;
       border: none;
       border-radius: 8px;
@@ -70,7 +44,7 @@
       width: 300px;
     }
 
-    form#searchForm button {
+    #searchForm button {
       background: #c02c8f;
       color: white;
       border: none;
@@ -81,10 +55,18 @@
     }
 
     .options {
-      display: flex;
-      align-items: center;
-      gap: 8px;
       color: #ff85e1;
+      font-size: 14px;
+    }
+
+    #homeBtn {
+      background: #4f0032;
+      border: none;
+      color: #ff85e1;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 14px;
+      cursor: pointer;
     }
 
     .sidebar {
@@ -99,6 +81,7 @@
       align-items: center;
       gap: 20px;
       padding: 20px 0;
+      z-index: 11;
     }
 
     .sidebar button {
@@ -124,69 +107,79 @@
       color: #ff85e1;
     }
 
+    #iframeContainer {
+      position: absolute;
+      top: 60px;
+      left: 70px;
+      right: 0;
+      bottom: 0;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .title {
+      font-size: 64px;
+      font-weight: bold;
+      background: linear-gradient(90deg, #ff7ce5, #c02c8f);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      text-align: center;
+      margin-top: 140px;
+      transition: opacity 0.3s ease;
+    }
+
+    .hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
     .footer {
       text-align: center;
       padding: 10px;
       font-size: 14px;
       background: #2a001c;
       color: #ff85e1;
-    }
-
-    #iframeContainer {
-      margin-top: 20px;
+      position: absolute;
+      bottom: 0;
       width: 100%;
-      height: 60vh;
-      display: flex;
-      justify-content: center;
-    }
-
-    iframe {
-      width: 80%;
-      height: 100%;
-      border: none;
-      border-radius: 12px;
     }
   </style>
 </head>
 <body>
-  <div class="bubbles">
-    <div></div><div></div><div></div><div></div><div></div>
+  <div class="sidebar">
+    <button onclick="loadPage('games.html');"><i class="bi bi-joystick"></i></button>
+    <button onclick="loadPage('movies.html');"><i class="bi bi-film"></i></button>
+    <button onclick="loadPage('tidechat.html');"><i class="bi bi-chat-dots"></i></button>
+    <button onclick="loadPage('credits.html');"><i class="bi bi-info-circle"></i></button>
+    <div class="sidebar-info">
+      <span id="battery">⚡</span><br>
+      <span id="time">⌚</span>
+    </div>
   </div>
 
-  <div id="mainContent">
-    <div id="loader" class="loader" style="display:none;">Loading...</div>
-
-    <div class="container" id="content">
-      <h1 class="title">Auraa<span class="dot">.</span></h1>
-
-      <form id="searchForm">
-        <input type="text" id="urlInput" placeholder="Surf the Web..." autocomplete="off" />
-        <div class="options">
-          <label><input type="checkbox" id="blankMode" /> Stealth (about:blank)</label>
-        </div>
-        <button type="submit">Search</button>
-      </form>
-
-      <div id="iframeContainer">
-        <iframe id="proxyFrame" title="Proxy View"></iframe>
+  <div class="topBar">
+    <form id="searchForm">
+      <input type="text" id="urlInput" placeholder="Surf the Web..." autocomplete="off" />
+      <div class="options">
+        <label><input type="checkbox" id="blankMode" /> Stealth</label>
       </div>
-    </div>
-
-    <div class="sidebar">
-      <button onclick="loadPage('games.html');"><i class="bi bi-joystick"></i></button>
-      <button onclick="loadPage('movies.html');"><i class="bi bi-film"></i></button>
-      <button onclick="loadPage('tidechat.html');"><i class="bi bi-chat-dots"></i></button>
-      <button onclick="loadPage('tideai.html');"><i class="bi bi-robot"></i></button>
-      <button onclick="loadPage('settings.html');"><i class="bi bi-gear"></i></button>
-      <button onclick="loadPage('credits.html');"><i class="bi bi-info-circle"></i></button>
-      <div class="sidebar-info">
-        <span id="battery">⚡</span><br>
-        <span id="time">⌚</span>
-      </div>
-    </div>
-
-    <div class="footer">Auraa | By Mizzery</div>
+      <button type="submit">Search</button>
+    </form>
+    <button id="homeBtn" onclick="location.href='index.html'">Home</button>
   </div>
+
+  <h1 class="title" id="mainTitle">Auraa<span class="dot">.</span></h1>
+
+  <div id="iframeContainer">
+    <iframe id="proxyFrame" title="Proxy View"></iframe>
+  </div>
+
+  <div class="footer">Auraa | By Mizzery</div>
 
   <script src="/active/uv/uv.bundle.js" defer></script>
   <script src="/active/uv/uv.config.js" defer></script>
@@ -209,7 +202,7 @@
       e.preventDefault();
       const input = document.getElementById("urlInput");
       const value = input.value.trim();
-      if (!value) return;
+      if (!value || typeof __uv$config === "undefined") return;
 
       const finalUrl = __uv$config.prefix + __uv$config.encodeUrl(generateURL(value));
 
@@ -222,6 +215,7 @@
         win.document.body.appendChild(iframe);
       } else {
         document.getElementById("proxyFrame").src = finalUrl;
+        document.getElementById("mainTitle").classList.add("hidden");
       }
 
       input.value = "";
@@ -229,6 +223,15 @@
 
     function loadPage(path) {
       document.getElementById("proxyFrame").src = path;
+      document.getElementById("mainTitle").classList.add("hidden");
+    }
+
+    function waitForUVConfig(callback) {
+      if (typeof __uv$config !== "undefined") {
+        callback();
+      } else {
+        setTimeout(() => waitForUVConfig(callback), 50);
+      }
     }
 
     window.onload = function () {
@@ -251,8 +254,9 @@
       setInterval(updateTime, 1000);
       updateTime();
 
-      // Search submit
-      document.getElementById("searchForm").addEventListener("submit", searchHandler);
+      waitForUVConfig(() => {
+        document.getElementById("searchForm").addEventListener("submit", searchHandler);
+      });
     };
   </script>
 </body>
