@@ -66,9 +66,14 @@
     </div>
   </div>
 
+  <!-- UV scripts (must come first) -->
   <script src="/active/uv/uv.bundle.js"></script>
-  <script src="/active/uv/uv.config.js" onload="startApp()"></script>
+  <script src="/active/uv/uv.config.js"></script>
   <script>
+    window.addEventListener("load", () => {
+      setTimeout(startApp, 10);
+    });
+
     function startApp() {
       const iframe = document.getElementById('tabView');
       const homePage = document.getElementById('homePage');
@@ -170,7 +175,7 @@
         const activeTab = getActiveTab();
         if (!activeTab) return;
         loadInTab(q, activeTab);
-        setTimeout(() => document.getElementById("topSearchInput").value = "", 100);
+        document.getElementById("topSearchInput").value = "";
       };
 
       document.getElementById("topSearchInput").addEventListener("keydown", function(e) {
@@ -187,7 +192,7 @@
         const activeTab = getActiveTab();
         if (!activeTab) return;
         loadInTab(q, activeTab);
-        setTimeout(() => document.getElementById("miniInput").value = "", 100);
+        document.getElementById("miniInput").value = "";
       });
 
       document.getElementById("addTabBtn").onclick = function () {
