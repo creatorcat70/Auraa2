@@ -8,27 +8,176 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
   <style>
     * { box-sizing: border-box; }
-    body { margin: 0; font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #3a002a, #0c001c); color: #fff; height: 100vh; overflow: hidden; display: flex; }
-    #sidebar { width: 70px; background: #2a001c; display: flex; flex-direction: column; align-items: center; padding: 20px 0; gap: 20px; position: fixed; top: 0; bottom: 0; left: 0; z-index: 1000; }
-    #sidebar button { background: transparent; border: none; color: #ff85e1; font-size: 24px; cursor: pointer; border-radius: 12px; padding: 10px; transition: background 0.3s ease; }
-    #sidebar button:hover { background: #c02c8f; color: white; }
-    #topSearchBar { position: fixed; top: 0; left: 70px; right: 0; height: 50px; display: flex; align-items: center; padding: 0 12px; background: rgba(40, 0, 30, 0.6); backdrop-filter: blur(6px); z-index: 1001; }
-    #topSearchBar input { flex: 1; padding: 10px 16px; font-size: 16px; border: none; border-radius: 8px; background: #4f0032; color: white; }
-    #topSearchBar button { margin-left: 8px; padding: 10px 16px; border: none; border-radius: 8px; background: #c02c8f; color: white; font-size: 16px; cursor: pointer; }
-    #mainLayout { margin-left: 70px; margin-top: 50px; flex: 1; display: flex; flex-direction: column; height: calc(100vh - 50px); }
-    #tabsWrapper { background: #20001e; display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; }
-    #tabs { display: flex; overflow-x: auto; }
-    .tab { background: #4f0032; color: white; padding: 8px 14px; border-radius: 8px 8px 0 0; margin-right: 6px; font-size: 14px; display: flex; align-items: center; cursor: pointer; white-space: nowrap; }
-    .tab.active { background: #e44cbc; }
-    .tab .close-btn { margin-left: 10px; cursor: pointer; color: #ccc; }
-    #tabControls button { background: #c02c8f; border: none; border-radius: 6px; padding: 6px 10px; color: white; font-size: 14px; margin-left: 5px; cursor: pointer; }
-    #mainContent { flex: 1; position: relative; overflow: hidden; }
-    iframe { width: 100%; height: 100%; border: none; display: none; }
-    #homePage { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: transparent; z-index: 500; }
-    #homePage h1 { font-size: 64px; margin-bottom: 30px; color: #ff7ce5; text-shadow: 0 0 12px #e44cbc; }
-    #miniSearch { display: flex; gap: 10px; }
-    #miniSearch input { width: 300px; padding: 12px 16px; background: #4f0032; color: white; border: none; border-radius: 8px; font-size: 16px; }
-    #miniSearch button { background: #c02c8f; color: white; border: none; border-radius: 8px; padding: 12px 20px; font-size: 16px; cursor: pointer; }
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #3a002a, #0c001c);
+      color: #fff;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+    }
+    #sidebar {
+      width: 70px;
+      background: #2a001c;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+      gap: 20px;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 1000;
+    }
+    #sidebar button {
+      background: transparent;
+      border: none;
+      color: #ff85e1;
+      font-size: 24px;
+      cursor: pointer;
+      border-radius: 12px;
+      padding: 10px;
+      transition: background 0.3s ease;
+    }
+    #sidebar button:hover {
+      background: #c02c8f;
+      color: white;
+    }
+    #topSearchBar {
+      position: fixed;
+      top: 0;
+      left: 70px;
+      right: 0;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      background: rgba(40, 0, 30, 0.6);
+      backdrop-filter: blur(6px);
+      z-index: 1001;
+    }
+    #topSearchBar input {
+      flex: 1;
+      padding: 10px 16px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: #4f0032;
+      color: white;
+    }
+    #topSearchBar button {
+      margin-left: 8px;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      background: #c02c8f;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #mainLayout {
+      margin-left: 70px;
+      margin-top: 50px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 50px);
+    }
+    #tabsWrapper {
+      background: #20001e;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 10px;
+    }
+    #tabs {
+      display: flex;
+      overflow-x: auto;
+    }
+    .tab {
+      background: #4f0032;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 8px 8px 0 0;
+      margin-right: 6px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .tab.active {
+      background: #e44cbc;
+    }
+    .tab .close-btn {
+      margin-left: 10px;
+      cursor: pointer;
+      color: #ccc;
+    }
+    #tabControls button {
+      background: #c02c8f;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 10px;
+      color: white;
+      font-size: 14px;
+      margin-left: 5px;
+      cursor: pointer;
+    }
+    #mainContent {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: none;
+    }
+    #homePage {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      z-index: 500;
+    }
+    #homePage h1 {
+      font-size: 64px;
+      margin-bottom: 30px;
+      color: #ff7ce5;
+      text-shadow: 0 0 12px #e44cbc;
+    }
+    #miniSearch {
+      display: flex;
+      gap: 10px;
+    }
+    #miniSearch input {
+      width: 300px;
+      padding: 12px 16px;
+      background: #4f0032;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    #miniSearch button {
+      background: #c02c8f;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -56,6 +205,7 @@
         <button id="addTabBtn">+</button>
       </div>
     </div>
+
     <div id="mainContent">
       <div id="homePage">
         <h1>Auraa<span class="dot">.</span></h1>
@@ -68,174 +218,10 @@
     </div>
   </div>
 
-  <!-- Load UV scripts -->
-  <script src="/active/uv/uv.bundle.js" defer></script>
-  <script src="/active/uv/uv.config.js" defer></script>
-
-  <!-- Auraa Main Script -->
-  <script>
-    function waitForUVConfig() {
-      return new Promise(resolve => {
-        const check = () => {
-          if (typeof __uv$config !== "undefined" && typeof __uv$config.encodeUrl === "function") {
-            resolve();
-          } else {
-            setTimeout(check, 20);
-          }
-        };
-        check();
-      });
-    }
-
-    window.addEventListener("load", () => {
-      waitForUVConfig().then(startApp);
-    });
-
-    function startApp() {
-      const iframe = document.getElementById('tabView');
-      const homePage = document.getElementById('homePage');
-      const tabs = document.getElementById('tabs');
-
-      function createTab(title, src) {
-        const tab = document.createElement("div");
-        tab.className = "tab";
-        tab.setAttribute("data-src", src);
-        const titleSpan = document.createElement("span");
-        titleSpan.className = "tab-title";
-        titleSpan.textContent = title;
-        const closeBtn = document.createElement("span");
-        closeBtn.className = "close-btn";
-        closeBtn.textContent = "×";
-        tab.appendChild(titleSpan);
-        tab.appendChild(closeBtn);
-        return tab;
-      }
-
-      function switchTab(tabElement) {
-        document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-        tabElement.classList.add("active");
-        const src = tabElement.getAttribute("data-src");
-        if (src === "home") {
-          iframe.style.display = "none";
-          iframe.src = "";
-          homePage.style.display = "flex";
-        } else {
-          homePage.style.display = "none";
-          iframe.style.display = "block";
-          iframe.src = src;
-        }
-      }
-
-      function openHomeTab() {
-        tabs.innerHTML = "";
-        const homeTab = createTab("Home", "home");
-        homeTab.classList.add("active");
-        tabs.appendChild(homeTab);
-        switchTab(homeTab);
-      }
-
-      function getActiveTab() {
-        return document.querySelector(".tab.active");
-      }
-
-      function generateSearchUrl(query) {
-        try {
-          const url = new URL(query);
-          return url.toString();
-        } catch {
-          try {
-            const url = new URL(`https://${query}`);
-            if (url.hostname.includes('.')) return url.toString();
-          } catch {}
-        }
-        return `https://duckduckgo.com/search?q=${encodeURIComponent(query)}&source=web`;
-      }
-
-      function loadInTab(url, tabElement) {
-        const rawUrl = generateSearchUrl(url);
-        const encoded = __uv$config.encodeUrl(rawUrl);
-        const proxyUrl = __uv$config.prefix + encoded;
-        tabElement.setAttribute('data-src', proxyUrl);
-        tabElement.querySelector('.tab-title').textContent = url;
-        iframe.src = proxyUrl;
-        iframe.style.display = "block";
-        homePage.style.display = "none";
-        document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-        tabElement.classList.add("active");
-      }
-
-      openHomeTab();
-
-      tabs.addEventListener("click", function (e) {
-        const target = e.target;
-        if (target.classList.contains("close-btn")) {
-          const tab = target.parentElement;
-          const wasActive = tab.classList.contains("active");
-          tab.remove();
-          if (wasActive) {
-            if (tabs.children.length) {
-              switchTab(tabs.children[0]);
-            } else {
-              openHomeTab();
-            }
-          }
-        } else if (target.classList.contains("tab")) {
-          switchTab(target);
-        } else if (target.parentElement && target.parentElement.classList.contains("tab")) {
-          switchTab(target.parentElement);
-        }
-      });
-
-      document.getElementById("topSearchGo").onclick = () => {
-        const q = document.getElementById("topSearchInput").value.trim();
-        if (!q) return;
-        const activeTab = getActiveTab();
-        if (!activeTab) return;
-        loadInTab(q, activeTab);
-        document.getElementById("topSearchInput").value = "";
-      };
-
-      document.getElementById("topSearchInput").addEventListener("keydown", function(e) {
-        if (e.key === "Enter") {
-          e.preventDefault();
-          document.getElementById("topSearchGo").click();
-        }
-      });
-
-      document.getElementById("miniSearch").addEventListener("submit", function(e) {
-        e.preventDefault();
-        const q = document.getElementById("miniInput").value.trim();
-        if (!q) return;
-        const activeTab = getActiveTab();
-        if (!activeTab) return;
-        loadInTab(q, activeTab);
-        document.getElementById("miniInput").value = "";
-      });
-
-      document.getElementById("addTabBtn").onclick = function () {
-        const newTab = createTab("New Tab", "home");
-        document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-        tabs.appendChild(newTab);
-        switchTab(newTab);
-      };
-
-      document.getElementById("backBtn").onclick = () => {
-        try { iframe.contentWindow.history.back(); } catch {}
-      };
-
-      document.getElementById("forwardBtn").onclick = () => {
-        try { iframe.contentWindow.history.forward(); } catch {}
-      };
-
-      document.getElementById("homeBtn").onclick = () => openHomeTab();
-
-      document.getElementById("btnGames").onclick = () => loadInTab("games.html", getActiveTab());
-      document.getElementById("btnChat").onclick = () => loadInTab("auraachat.html", getActiveTab());
-      document.getElementById("btnAI").onclick = () => loadInTab("tideai.html", getActiveTab());
-      document.getElementById("btnWeather").onclick = () => loadInTab("weather.html", getActiveTab());
-      document.getElementById("btnSettings").onclick = () => loadInTab("settings.html", getActiveTab());
-      document.getElementById("btnCredits").onclick = () => loadInTab("credits.html", getActiveTab());
-    }
-  </script>
+  <!-- ✅ UV scripts must load first -->
+  <script src="/active/uv/uv.bundle.js"></script>
+  <script src="/active/uv/uv.config.js"></script>
+  <!-- ✅ Main logic (waits for UV config) -->
+  <script src="/assets/js/index.js"></script>
 </body>
 </html>
