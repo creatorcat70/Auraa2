@@ -1,63 +1,96 @@
-  function runStealthMode() {
-    const title = "Calculator - Google Search";
-    const icon = "ixlicon.png";
-    const src = window.location.href;
+function waitForUVConfig() {
+  return new Promise(resolve => {
+    const check = () => {
+      if (typeof __uv$config !== "undefined" && typeof __uv$config.encodeUrl === "function") {
+        resolve();
+      } else {
+        setTimeout(check, 20);
+      }
+    };
+    check();
+  });
+}
 
-    const popup = window.open("about:blank", "_blank");
+function runStealthMode() {
+  const title = "Calculator - Google Search";
+  const icon = "ixlicon.png"; // Ensure this icon exists in your project root or update path
+  const src = window.location.href;
 
-    if (!popup || popup.closed) {
-      alert("Popup blocked. Please allow popups for Cloaking to work.");
-      return;
-    }
+  const popup = window.open("about:blank", "_blank");
 
-    popup.document.write(`
-      <html>
-        <head>
-          <title>${title}</title>
-          <link rel="icon" href="${icon}">
-          <style>
-            html, body {
-              margin: 0;
-              padding: 0;
-              height: 100%;
-              overflow: hidden;
-            }
-            iframe {
-              width: 100%;
-              height: 100%;
-              border: none;
-            }
-          </style>
-        </head>
-        <body>
-          <iframe src="${src}"></iframe>
-        </body>
-      </html>
-    `);
-    popup.document.close();
-
-    window.location.href = "https://www.ixl.com";
+  if (!popup || popup.closed) {
+    alert("Popup blocked. Please allow popups for Cloaking to work.");
+    return;
   }
 
- window.onload = function () {
-  // Hide loader, show content
-  document.getElementById('loader').style.display = 'none';
-  document.getElementById('content').style.display = 'block';
+  popup.document.write(`
+    <html>
+      <head>
+        <title>${title}</title>
+        <link rel="icon" href="${icon}">
+        <style>
+          html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+          }
+          iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+          }
+        </style>
+      </head>
+      <body>
+        <iframe src="${src}"></iframe>
+      </body>
+    </html>
+  `);
+  popup.document.close();
+
+  // Cloak current window
+  window.location.href = "https://www.ixl.com";
+}
+
+function generateSearchUrl(query) {
+  try {
+    const url = new URL(query);
+    return url.toString();
+  } catch {
+    try {
+      const url = new URL(`https://${query}`);
+      if (url.hostname.includes('.')) return url.toString();
+    } catch {}
+  }
+  return `https://duckduckgo.com/search?q=${encodeURIComponent(query)}&source=web`;
+}
+
+window.onload = async function () {
+  await waitForUVConfig();
+
+  // Show main UI
+  const loader = document.getElementById('loader');
+  const content = document.getElementById('content');
+  if (loader) loader.style.display = 'none';
+  if (content) content.style.display = 'block';
 
   // Stealth mode setup
-  const stealth = JSON.parse(localStorage.getItem("stealthModeEnabled")) || false;
   const checkbox = document.getElementById("blankMode");
-  checkbox.checked = stealth;
+  const stealth = JSON.parse(localStorage.getItem("stealthModeEnabled")) || false;
+  if (checkbox) {
+    checkbox.checked = stealth;
 
-  if (stealth) runStealthMode();
+    if (stealth) runStealthMode();
 
-  checkbox.addEventListener("change", function () {
-    const isChecked = checkbox.checked;
-    localStorage.setItem("stealthModeEnabled", JSON.stringify(isChecked));
-    if (isChecked) runStealthMode();
-  });
+    checkbox.addEventListener("change", function () {
+      const isChecked = checkbox.checked;
+      localStorage.setItem("stealthModeEnabled", JSON.stringify(isChecked));
+      if (isChecked) runStealthMode();
+    });
+  }
 
-  // 🌠 Meteor spawner
+  // Meteor animation (optional)
   function spawnMeteor() {
     const zone = document.getElementById("meteorZone");
     if (!zone) return;
@@ -74,51 +107,45 @@
 
   spawnMeteor();
   setInterval(spawnMeteor, 10000);
-};
 
-
+  // Game loading animation (optional, for game links)
   document.querySelectorAll('a').forEach(function (link) {
     link.addEventListener('click', function () {
-      var gameName = link.textContent;
+      const gameName = link.textContent;
       console.log("Loading " + gameName + "...");
 
-      document.getElementById('loader').style.display = 'block';
-      document.getElementById('content').style.display = 'none';
+      if (loader) loader.style.display = 'block';
+      if (content) content.style.display = 'none';
 
-      var iframe = document.getElementById('gameFrame');
+      const iframe = document.getElementById('gameFrame');
       if (iframe) {
         iframe.onload = function () {
-          document.getElementById('loader').style.display = 'none';
-          document.getElementById('content').style.display = 'block';
+          if (loader) loader.style.display = 'none';
+          if (content) content.style.display = 'block';
         };
       }
     });
   });
 
-  document.getElementById('searchForm').addEventListener('submit', async function (e) {
-    e.preventDefault();
-    let query = document.getElementById('urlInput').value.trim();
-    if (!query) return;
+  // Main search form (UV-proxied browsing)
+  const searchForm = document.getElementById('searchForm');
+  if (searchForm) {
+    searchForm.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const input = document.getElementById('urlInput');
+      if (!input) return;
 
-    const rawUrl = generateSearchUrl(query);
-    const encoded = __uv$config.encodeUrl(rawUrl);
-    const proxyUrl = __uv$config.prefix + encoded;
+      let query = input.value.trim();
+      if (!query) return;
 
-    document.getElementById('loader').style.display = 'block';
-    document.getElementById('content').style.display = 'none';
+      const rawUrl = generateSearchUrl(query);
+      const encoded = __uv$config.encodeUrl(rawUrl);
+      const proxyUrl = __uv$config.prefix + encoded;
 
-    window.location.href = proxyUrl;
-  });
+      if (loader) loader.style.display = 'block';
+      if (content) content.style.display = 'none';
 
-  function generateSearchUrl(query) {
-    try {
-      const url = new URL(query);
-      return url.toString();
-    } catch {
-      try {
-        const url = new URL(`https://${query}`);
-        if (url.hostname.includes('.')) return url.toString();
-      } catch {}
-    }
-    return `https://duckduckgo.com/search?q=${encodeURIComponent(query)}&source=web`;
+      window.location.href = proxyUrl;
+    });
   }
+};
