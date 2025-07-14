@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Auraa</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <script src="/active/uv/uv.bundle.js" defer></script>
+  <script src="/active/uv/uv.config.js" defer></script>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -181,12 +183,12 @@
 </head>
 <body>
   <div id="sidebar">
-    <button id="btnGames" title="Games"><i class="bi bi-joystick"></i></button>
-    <button id="btnChat" title="Chat"><i class="bi bi-chat-dots"></i></button>
-    <button id="btnAI" title="AI"><i class="bi bi-robot"></i></button>
-    <button id="btnWeather" title="Weather"><i class="bi bi-cloud-rain"></i></button>
-    <button id="btnSettings" title="Settings"><i class="bi bi-gear"></i></button>
-    <button id="btnCredits" title="Credits"><i class="bi bi-info-circle"></i></button>
+    <button title="Games"><i class="bi bi-joystick"></i></button>
+    <button title="Chat"><i class="bi bi-chat-dots"></i></button>
+    <button title="AI"><i class="bi bi-robot"></i></button>
+    <button title="Weather"><i class="bi bi-cloud-rain"></i></button>
+    <button title="Settings"><i class="bi bi-gear"></i></button>
+    <button title="Credits"><i class="bi bi-info-circle"></i></button>
   </div>
 
   <div id="topSearchBar">
@@ -216,154 +218,133 @@
     </div>
   </div>
 
-  <script>
-    function loadUVScripts(callback) {
-      const bundle = document.createElement("script");
-      const config = document.createElement("script");
-      let loaded = 0;
-      function checkDone() { if (++loaded === 2) callback(); }
-      bundle.src = "https://cdn.jsdelivr.net/gh/creatorcat70/Auraa2@main/active/uv/uv.bundle.js";
-      config.src = "https://cdn.jsdelivr.net/gh/creatorcat70/Auraa2@main/active/uv/uv.config.js";
-      bundle.onload = checkDone;
-      config.onload = checkDone;
-      document.head.appendChild(bundle);
-      document.head.appendChild(config);
-    }
+  <script defer>
+    window.onload = function () {
+      const iframe = document.getElementById("tabView");
+      const homePage = document.getElementById("homePage");
+      const tabs = document.getElementById("tabs");
 
-    function waitForUVConfig(callback) {
-      if (typeof __uv$config !== "undefined") callback();
-      else setTimeout(() => waitForUVConfig(callback), 50);
-    }
+      function getActiveTab() {
+        return document.querySelector(".tab.active");
+      }
 
-    loadUVScripts(() => {
-      waitForUVConfig(() => {
-        const iframe = document.getElementById("tabView");
-        const homePage = document.getElementById("homePage");
-
-        function getActiveTab() {
-          return document.querySelector(".tab.active");
-        }
-
-        function generateSearchUrl(query) {
+      function generateSearchUrl(query) {
+        try {
+          const url = new URL(query);
+          return url.toString();
+        } catch {
           try {
-            const url = new URL(query);
-            return url.toString();
-          } catch {
-            try {
-              const url = new URL(`https://${query}`);
-              if (url.hostname.includes('.')) return url.toString();
-            } catch {}
-          }
-          return `https://duckduckgo.com/search?q=${encodeURIComponent(query)}&source=web`;
+            const url = new URL(`https://${query}`);
+            if (url.hostname.includes('.')) return url.toString();
+          } catch {}
         }
+        return `https://duckduckgo.com/search?q=${encodeURIComponent(query)}&source=web`;
+      }
 
-        function loadInTab(url, tabElement) {
-          const rawUrl = generateSearchUrl(url);
-          const encoded = __uv$config.encodeUrl(rawUrl);
-          const proxyUrl = __uv$config.prefix + encoded;
+      function loadInTab(url, tabElement) {
+        const rawUrl = generateSearchUrl(url);
+        const encoded = __uv$config.encodeUrl(rawUrl);
+        const proxyUrl = __uv$config.prefix + encoded;
 
-          tabElement.setAttribute('data-src', proxyUrl);
-          tabElement.querySelector('.tab-title').textContent = url;
+        tabElement.setAttribute('data-src', proxyUrl);
+        tabElement.querySelector('.tab-title').textContent = url;
 
-          iframe.src = proxyUrl;
-          iframe.style.display = "block";
+        iframe.src = proxyUrl;
+        iframe.style.display = "block";
+        homePage.style.display = "none";
+
+        document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+        tabElement.classList.add("active");
+      }
+
+      function createTab(title, src) {
+        const tab = document.createElement("div");
+        tab.className = "tab";
+        tab.setAttribute("data-src", src);
+
+        const titleSpan = document.createElement("span");
+        titleSpan.className = "tab-title";
+        titleSpan.textContent = title;
+
+        const closeBtn = document.createElement("span");
+        closeBtn.className = "close-btn";
+        closeBtn.textContent = "×";
+
+        tab.appendChild(titleSpan);
+        tab.appendChild(closeBtn);
+        return tab;
+      }
+
+      function switchTab(tabElement) {
+        document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+        tabElement.classList.add("active");
+        const src = tabElement.getAttribute("data-src");
+
+        if (src === "home") {
+          iframe.style.display = "none";
+          iframe.src = "";
+          homePage.style.display = "flex";
+        } else {
           homePage.style.display = "none";
-
-          document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-          tabElement.classList.add("active");
+          iframe.style.display = "block";
+          iframe.src = src;
         }
+      }
 
-        function createTab(title, src) {
-          const tab = document.createElement("div");
-          tab.className = "tab";
-          tab.setAttribute("data-src", src);
+      document.getElementById("addTabBtn").onclick = function () {
+        const newTab = createTab("New Tab", "home");
+        tabs.appendChild(newTab);
+        switchTab(newTab);
+      };
 
-          const titleSpan = document.createElement("span");
-          titleSpan.className = "tab-title";
-          titleSpan.textContent = title;
-
-          const closeBtn = document.createElement("span");
-          closeBtn.className = "close-btn";
-          closeBtn.textContent = "×";
-
-          tab.appendChild(titleSpan);
-          tab.appendChild(closeBtn);
-          return tab;
-        }
-
-        function switchTab(tabElement) {
-          document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-          tabElement.classList.add("active");
-          const src = tabElement.getAttribute("data-src");
-
-          if (src === "home") {
-            iframe.style.display = "none";
-            iframe.src = "";
-            homePage.style.display = "flex";
-          } else {
-            homePage.style.display = "none";
-            iframe.style.display = "block";
-            iframe.src = src;
+      tabs.addEventListener("click", function (e) {
+        const target = e.target;
+        if (target.classList.contains("close-btn")) {
+          const tab = target.parentElement;
+          const wasActive = tab.classList.contains("active");
+          tab.remove();
+          if (wasActive && tabs.children.length > 0) {
+            switchTab(tabs.children[0]);
           }
+        } else if (target.classList.contains("tab") || target.parentElement.classList.contains("tab")) {
+          switchTab(target.closest(".tab"));
         }
-
-        const tabs = document.getElementById("tabs");
-
-        document.getElementById("addTabBtn").onclick = function() {
-          const newTab = createTab("New Tab", "home");
-          tabs.appendChild(newTab);
-          switchTab(newTab);
-        };
-
-        tabs.addEventListener("click", function(e) {
-          const target = e.target;
-          if (target.classList.contains("close-btn")) {
-            const tab = target.parentElement;
-            const wasActive = tab.classList.contains("active");
-            tab.remove();
-            if (wasActive && tabs.children.length > 0) {
-              switchTab(tabs.children[0]);
-            }
-          } else if (target.classList.contains("tab") || target.parentElement.classList.contains("tab")) {
-            switchTab(target.closest(".tab"));
-          }
-        });
-
-        function openHomeTab() {
-          tabs.innerHTML = "";
-          const homeTab = createTab("Home", "home");
-          homeTab.classList.add("active");
-          tabs.appendChild(homeTab);
-          switchTab(homeTab);
-        }
-
-        openHomeTab();
-
-        document.getElementById("topSearchGo").onclick = () => {
-          const q = document.getElementById("topSearchInput").value.trim();
-          if (!q) return;
-          const activeTab = getActiveTab();
-          if (!activeTab) return;
-          loadInTab(q, activeTab);
-        };
-
-        document.getElementById("topSearchInput").addEventListener("keydown", function(e) {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            document.getElementById("topSearchGo").click();
-          }
-        });
-
-        document.getElementById("miniSearch").addEventListener("submit", function(e) {
-          e.preventDefault();
-          const q = document.getElementById("miniInput").value.trim();
-          if (!q) return;
-          const activeTab = getActiveTab();
-          if (!activeTab) return;
-          loadInTab(q, activeTab);
-        });
       });
-    });
+
+      function openHomeTab() {
+        tabs.innerHTML = "";
+        const homeTab = createTab("Home", "home");
+        homeTab.classList.add("active");
+        tabs.appendChild(homeTab);
+        switchTab(homeTab);
+      }
+
+      openHomeTab();
+
+      document.getElementById("topSearchGo").onclick = () => {
+        const q = document.getElementById("topSearchInput").value.trim();
+        if (!q) return;
+        const activeTab = getActiveTab();
+        if (!activeTab) return;
+        loadInTab(q, activeTab);
+      };
+
+      document.getElementById("topSearchInput").addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          document.getElementById("topSearchGo").click();
+        }
+      });
+
+      document.getElementById("miniSearch").addEventListener("submit", function (e) {
+        e.preventDefault();
+        const q = document.getElementById("miniInput").value.trim();
+        if (!q) return;
+        const activeTab = getActiveTab();
+        if (!activeTab) return;
+        loadInTab(q, activeTab);
+      });
+    };
   </script>
 </body>
 </html>
