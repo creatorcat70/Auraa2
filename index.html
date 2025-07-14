@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Auraa</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
   <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
   <style>
     * { box-sizing: border-box; }
     body { margin: 0; font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #3a002a, #0c001c); color: #fff; height: 100vh; overflow: hidden; display: flex; }
@@ -40,10 +40,12 @@
     <button id="btnSettings" title="Settings"><i class="bi bi-gear"></i></button>
     <button id="btnCredits" title="Credits"><i class="bi bi-info-circle"></i></button>
   </div>
+
   <div id="topSearchBar">
     <input type="text" id="topSearchInput" placeholder="Search or enter URL..." />
     <button id="topSearchGo">Go</button>
   </div>
+
   <div id="mainLayout">
     <div id="tabsWrapper">
       <div id="tabs"></div>
@@ -66,12 +68,27 @@
     </div>
   </div>
 
-  <!-- UV scripts (must come first) -->
-  <script src="/active/uv/uv.bundle.js"></script>
-  <script src="/active/uv/uv.config.js"></script>
+  <!-- Load UV scripts -->
+  <script src="/active/uv/uv.bundle.js" defer></script>
+  <script src="/active/uv/uv.config.js" defer></script>
+
+  <!-- Auraa Main Script -->
   <script>
+    function waitForUVConfig() {
+      return new Promise(resolve => {
+        const check = () => {
+          if (typeof __uv$config !== "undefined" && typeof __uv$config.encodeUrl === "function") {
+            resolve();
+          } else {
+            setTimeout(check, 20);
+          }
+        };
+        check();
+      });
+    }
+
     window.addEventListener("load", () => {
-      setTimeout(startApp, 10);
+      waitForUVConfig().then(startApp);
     });
 
     function startApp() {
