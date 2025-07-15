@@ -4,66 +4,93 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Auraa - Games</title>
-  <link rel="stylesheet" href="/assets/css/style.css" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    /* Optional: Fallback purple theme if CSS doesn't load */
     body {
-      background-color: #1a001f;
-      color: #e0d6ff;
-      font-family: 'Poppins', sans-serif;
       margin: 0;
       padding: 20px;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #3a002a, #0c001c);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      animation: flickerBackground 6s infinite ease-in-out;
+    }
+
+    @keyframes flickerBackground {
+      0%, 100% { background: linear-gradient(135deg, #3a002a, #0c001c); }
+      10% { background: linear-gradient(135deg, #4a0038, #140033); }
+      25% { background: linear-gradient(135deg, #61004d, #1a0047); }
+      40%, 90% { background: linear-gradient(135deg, #3a002a, #0c001c); }
     }
 
     .container {
+      width: 90%;
       max-width: 800px;
-      margin: auto;
       text-align: center;
+      margin-top: 40px;
     }
 
     .title {
-      font-size: 2.5rem;
-      color: #b388ff;
+      font-size: 2.7rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #ff7ce5, #c02c8f);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 8px #ff7ce5;
       margin-bottom: 2rem;
+      user-select: none;
     }
 
     .game-btn {
-      background-color: #6a1b9a;
+      background-color: rgba(255, 124, 229, 0.15);
       color: white;
       padding: 15px 30px;
       margin: 10px;
-      border: none;
+      border: 1px solid rgba(255, 124, 229, 0.3);
       border-radius: 12px;
       font-size: 1rem;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: all 0.25s ease;
+      box-shadow: 0 0 10px rgba(255, 124, 229, 0.3);
     }
 
     .game-btn:hover {
-      background-color: #8e24aa;
+      background-color: rgba(255, 124, 229, 0.3);
+      box-shadow: 0 0 15px rgba(255, 124, 229, 0.6);
+      transform: translateY(-2px);
     }
 
     .back-btn {
       margin-top: 30px;
-      background-color: #4527a0;
+      background-color: rgba(255, 124, 229, 0.2);
       color: white;
       padding: 12px 24px;
-      border: none;
+      border: 1px solid rgba(255, 124, 229, 0.3);
       border-radius: 10px;
       font-size: 1rem;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: all 0.25s ease;
+      box-shadow: 0 0 10px rgba(255, 124, 229, 0.4);
     }
 
     .back-btn:hover {
-      background-color: #5e35b1;
+      background-color: rgba(255, 124, 229, 0.4);
+      box-shadow: 0 0 15px rgba(255, 124, 229, 0.6);
+      transform: translateY(-2px);
     }
 
     .footer {
       margin-top: 60px;
       font-size: 0.9rem;
-      color: #aaaaaa;
+      color: #cccccc;
       text-align: center;
+      opacity: 0.8;
     }
   </style>
 </head>
@@ -85,7 +112,7 @@
     <button class="back-btn" onclick="goBackToAuraa()">Back to Auraa</button>
   </div>
 
-  <div class="footer">Auraa | Original site made by Mizzery</div>
+  <div class="footer">Auraa | By Quantum Services</div>
 
   <script>
     function openGame(gameFile) {
@@ -93,7 +120,7 @@
     }
 
     function goBackToAuraa() {
-      window.location.href = 'index.html';
+      window.top.location.href = 'index.html'; // Ensures it's not nested in iframe
     }
   </script>
 </body>
