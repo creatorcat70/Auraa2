@@ -233,13 +233,28 @@
       }
     }
 
+    function isURL(input) {
+      try {
+        const url = new URL(input.includes("://") ? input : "https://" + input);
+        return url.hostname.includes(".");
+      } catch {
+        return false;
+      }
+    }
+
     function searchHandler(e) {
       e.preventDefault();
       const input = document.getElementById("urlInput");
       const value = input.value.trim();
       if (!value || typeof __uv$config === "undefined") return;
 
-      const finalUrl = __uv$config.prefix + __uv$config.encodeUrl(generateURL(value));
+      let finalUrl = "";
+      if (isURL(value)) {
+        const fullUrl = value.includes("://") ? value : "https://" + value;
+        finalUrl = __uv$config.prefix + __uv$config.encodeUrl(fullUrl);
+      } else {
+        finalUrl = __uv$config.prefix + __uv$config.encodeUrl(generateURL(value));
+      }
 
       if (document.getElementById("blankMode").checked) {
         const win = window.open("about:blank", "_blank");
