@@ -112,7 +112,7 @@
   <select id="bareServerSelect">
     <option value="math.cinevez.lol/bare/">Default - math.cinevez.lol</option>
     <option value="petezahgames.com/bare/">Alt Bare - petezahgames.com</option>
-    <option value="bare.soloo.fun">Unreliable - bare.soloo.fun</option>
+    <option value="bare.soloo.fun/">Unreliable - bare.soloo.fun</option>
   </select>
 
   <label for="particleCountInput">Number of falling particles:</label>
@@ -123,7 +123,7 @@
   </label>
 
   <button id="saveBtn" style="margin-top:40px;">Save Settings</button>
-  <button onclick="window.top.location.href='index.html'" style="margin-top:20px;">Back to Homepage</button>
+  <button id="backBtn" style="margin-top:20px;">Back to Homepage</button>
 
   <p class="footer">Auraa Settings | Made by @thefakesydney</p>
 
@@ -135,13 +135,14 @@
     const searchEngineSelect = document.getElementById('searchEngineSelect');
     const bareServerSelect = document.getElementById('bareServerSelect');
     const dynamicFavicon = document.getElementById('dynamicFavicon');
+    const backBtn = document.getElementById('backBtn');
 
     function loadSettings() {
       cloakSelect.value = localStorage.getItem('auraaCloak') || 'default';
       particleCountInput.value = localStorage.getItem('auraaParticleCount') || '100';
       particleToggle.checked = localStorage.getItem('auraaParticlesEnabled') !== 'false';
       searchEngineSelect.value = localStorage.getItem('searchEngine') || 'duckduckgo';
-      bareServerSelect.value = localStorage.getItem('bareServer') || 'math.cinevez.lol/bare';
+      bareServerSelect.value = localStorage.getItem('bareServer') || 'math.cinevez.lol/bare/';
       updateCloakVisuals();
     }
 
@@ -153,6 +154,7 @@
       localStorage.setItem('bareServer', bareServerSelect.value);
       alert('Settings saved!');
       updateCloakVisuals();
+      updateParticlesEffect();
     }
 
     function updateCloakVisuals() {
@@ -168,6 +170,9 @@
 
     cloakSelect.addEventListener('change', updateCloakVisuals);
     saveBtn.addEventListener('click', saveSettings);
+    backBtn.addEventListener('click', () => {
+      window.location.href = 'index.html';
+    });
 
     window.addEventListener('load', () => {
       loadSettings();
