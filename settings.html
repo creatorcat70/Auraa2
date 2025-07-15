@@ -108,13 +108,6 @@
     <option value="brave">Brave</option>
   </select>
 
-  <label for="bareServerSelect">Bare Server (Proxy):</label>
-  <select id="bareServerSelect">
-    <option value="https://math.cinevez.lol/bare/">Default - math.cinevez.lol</option>
-    <option value="https://petezahgames.com/bare/">Alt Bare - petezahgames.com</option>
-    <option value="https://bare.soloo.fun/">Unreliable - bare.soloo.fun</option>
-  </select>
-
   <label for="particleCountInput">Number of falling particles:</label>
   <input type="number" id="particleCountInput" min="0" max="300" step="1" placeholder="Enter number (0-300)" />
 
@@ -123,7 +116,7 @@
   </label>
 
   <button id="saveBtn" style="margin-top:40px;">Save Settings</button>
-  <button id="backBtn" style="margin-top:20px;">Back to Homepage</button>
+  <button onclick="window.top.location.href='index.html'" style="margin-top:20px;">Back to Homepage</button>
 
   <p class="footer">Auraa Settings | Made by @thefakesydney</p>
 
@@ -133,16 +126,13 @@
     const particleToggle = document.getElementById('particleToggle');
     const saveBtn = document.getElementById('saveBtn');
     const searchEngineSelect = document.getElementById('searchEngineSelect');
-    const bareServerSelect = document.getElementById('bareServerSelect');
     const dynamicFavicon = document.getElementById('dynamicFavicon');
-    const backBtn = document.getElementById('backBtn');
 
     function loadSettings() {
       cloakSelect.value = localStorage.getItem('auraaCloak') || 'default';
       particleCountInput.value = localStorage.getItem('auraaParticleCount') || '100';
       particleToggle.checked = localStorage.getItem('auraaParticlesEnabled') !== 'false';
       searchEngineSelect.value = localStorage.getItem('searchEngine') || 'duckduckgo';
-      bareServerSelect.value = localStorage.getItem('bareServer') || 'math.cinevez.lol/bare/';
       updateCloakVisuals();
     }
 
@@ -151,10 +141,8 @@
       localStorage.setItem('auraaParticleCount', particleCountInput.value);
       localStorage.setItem('auraaParticlesEnabled', particleToggle.checked);
       localStorage.setItem('searchEngine', searchEngineSelect.value);
-      localStorage.setItem('bareServer', bareServerSelect.value);
       alert('Settings saved!');
       updateCloakVisuals();
-      updateParticlesEffect();
     }
 
     function updateCloakVisuals() {
@@ -170,9 +158,6 @@
 
     cloakSelect.addEventListener('change', updateCloakVisuals);
     saveBtn.addEventListener('click', saveSettings);
-    backBtn.addEventListener('click', () => {
-      window.location.href = 'index.html';
-    });
 
     window.addEventListener('load', () => {
       loadSettings();
