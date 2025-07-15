@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Auraa Settings [WIP] </title>
+  <title>Auraa Settings [WIP]</title>
   <link rel="icon" type="image/png" href="icon.png" id="dynamicFavicon" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
   <style>
@@ -12,34 +12,28 @@
     body {
       margin: 0;
       padding: 40px;
-      background: linear-gradient(135deg, #2a003f, #000000);
+      background: linear-gradient(135deg, #3a002a, #0c001c);
       color: #fff;
       font-family: 'Poppins', sans-serif;
       min-height: 100vh;
-      animation: flickerBackground 6s infinite ease-in-out;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
     }
 
-    @keyframes flickerBackground {
-      0%, 100% { background: linear-gradient(135deg, #2a003f, #000000); }
-      10% { background: linear-gradient(135deg, #3c096c, #111111); }
-      20% { background: linear-gradient(135deg, #7b2cbf, #000); }
-      25% { background: linear-gradient(135deg, #9d4edd, #1a0033); }
-      30%, 90% { background: linear-gradient(135deg, #2a003f, #000000); }
-    }
-
     .title {
       font-size: 4rem;
       font-weight: 700;
-      text-shadow: 0 0 10px #9d4edd, 0 0 20px #7b2cbf, 0 0 30px #ffffff;
+      background: linear-gradient(90deg, #ff7ce5, #c02c8f);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
       margin-bottom: 1rem;
     }
 
     .dot {
-      color: #9d4edd;
+      color: #ff85e1;
     }
 
     label {
@@ -62,7 +56,7 @@
       background: #7b2cbf;
       color: white;
       cursor: pointer;
-      box-shadow: 0 0 8px #9d4edd;
+      box-shadow: 0 0 8px #c02c8f;
       transition: 0.3s ease;
       outline: none;
       width: 300px;
@@ -96,7 +90,7 @@
   <h1 class="title">Auraa<span class="dot"> Settings.</span></h1>
 
   <label for="cloakSelect">Cloak tab as:</label>
-  <select id="cloakSelect" aria-label="Select cloak tab icon and title">
+  <select id="cloakSelect">
     <option value="default">Default - Auraa</option>
     <option value="https://www.khanacademy.org/favicon.ico|Khan Academy">Khan Academy</option>
     <option value="https://www.google.com/favicon.ico|Google Classroom">Google Classroom</option>
@@ -106,7 +100,7 @@
   </select>
 
   <label for="searchEngineSelect">Default Search Engine:</label>
-  <select id="searchEngineSelect" aria-label="Select default search engine">
+  <select id="searchEngineSelect">
     <option value="duckduckgo">DuckDuckGo</option>
     <option value="google">Google</option>
     <option value="bing">Bing</option>
@@ -129,7 +123,7 @@
   </label>
 
   <button id="saveBtn" style="margin-top:40px;">Save Settings</button>
-  <button onclick="window.location.href='index.html'" style="margin-top:20px;">Back to Homepage</button>
+  <button onclick="location.replace('index.html')" style="margin-top:20px;">Back to Homepage</button>
 
   <p class="footer">Auraa Settings | Made by @thefakesydney</p>
 
@@ -154,7 +148,6 @@
       const engine = localStorage.getItem('searchEngine') || 'duckduckgo';
       searchEngineSelect.value = engine;
 
-      // Update title and favicon based on cloak
       updateCloakVisuals();
     }
 
@@ -180,13 +173,13 @@
 
     cloakSelect.addEventListener('change', updateCloakVisuals);
     saveBtn.addEventListener('click', saveSettings);
+    window.addEventListener('load', () => {
+      loadSettings();
+      updateParticlesEffect();
+    });
 
-    loadSettings();
-  </script>
-
-  <script>
+    // PARTICLE EFFECT
     let animationFrameId = null;
-
     function createParticles() {
       if (document.getElementById('snowCanvas')) return;
 
@@ -234,7 +227,6 @@
         flakes.forEach(flake => {
           flake.y += flake.speedY;
           flake.x += flake.speedX;
-
           if (flake.y > height) {
             flake.y = 0;
             flake.x = Math.random() * width;
@@ -267,12 +259,6 @@
 
     particleToggle.addEventListener('change', () => {
       localStorage.setItem('auraaParticlesEnabled', particleToggle.checked);
-      updateParticlesEffect();
-    });
-
-    // Run on load:
-    window.addEventListener('load', () => {
-      loadSettings();
       updateParticlesEffect();
     });
   </script>
