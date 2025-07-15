@@ -4,33 +4,42 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Auraa Chat</title>
-  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    /* Optional fallback styles if style.css fails to load */
     body {
       margin: 0;
       padding: 0;
-      background-color: #1a001f;
-      color: #e0d6ff;
+      background: linear-gradient(135deg, #3a002a, #0c001c);
+      color: #ffd2f4;
       font-family: 'Poppins', sans-serif;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 50px auto;
-      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
     }
 
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
     .tide-chat-title {
-      font-size: 2.5rem;
-      font-weight: 600;
-      color: #b388ff;
+      font-size: 3rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #ff7ce5, #c02c8f);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
       margin-bottom: 20px;
     }
 
     .dot {
-      color: #9c27b0;
+      color: #ff85e1;
       animation: pulse 1.5s infinite;
     }
 
@@ -41,17 +50,42 @@
       }
       50% {
         opacity: 1;
-        transform: scale(1.3);
+        transform: scale(1.2);
       }
     }
 
     .chat-container-glow {
-      background: #2b0c3f;
+      background: #4f0032;
       border-radius: 16px;
       padding: 10px;
-      box-shadow: 0 0 15px rgba(179, 136, 255, 0.5);
+      box-shadow: 0 0 15px rgba(255, 126, 229, 0.3);
       height: 500px;
       overflow: hidden;
+    }
+
+    .back-btn {
+      margin-top: 30px;
+      padding: 12px 30px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 25px;
+      background: #c02c8f;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      box-shadow: 0 0 10px rgba(255, 126, 229, 0.4);
+    }
+
+    .back-btn:hover {
+      background: #ff7ce5;
+      color: black;
+    }
+
+    .footer {
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.6);
+      text-shadow: 0 0 5px #c77dff;
     }
   </style>
 </head>
@@ -62,6 +96,10 @@
       <div id="rt-53cbae4f488348636d437c16af1e2a88"></div>
       <script src="https://rumbletalk.com/client/?nFXgmJOf"></script>
     </div>
+
+    <button class="back-btn" onclick="location.replace('index.html')">Back to Auraa</button>
+
+    <div class="footer">© 2025 Auraa | Powered by thefakesydney</div>
   </div>
 </body>
 </html>
