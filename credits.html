@@ -100,15 +100,17 @@
       font-size: 1rem;
       border: none;
       border-radius: 25px;
-      background: #7b2cbf;
+      background: #c02c8f;
       color: white;
       cursor: pointer;
-      transition: background 0.3s ease;
-      box-shadow: 0 0 12px rgba(155, 89, 182, 0.6);
+      transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 10px rgba(255, 126, 229, 0.4);
     }
 
     button:hover {
-      background: #9d4edd;
+      background: #ff7ce5;
+      color: black;
+      box-shadow: 0 0 12px rgba(255, 126, 229, 0.8);
     }
 
     .footer {
@@ -141,15 +143,15 @@
       </ul>
     </div>
 
-    <a class="button-link" href="https://github.com/creatorcat70/auraa2" target="_blank">GitHub</a>
-    <a class="button-link" href="https://www.youtube.com/@thefakesydney" target="_blank">YouTube</a>
-    <a class="button-link" href="https://guns.lol/thefakesydney" target="_blank">guns.lol</a>
+    <a class="button-link" href="https://github.com/creatorcat70/auraa2" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <a class="button-link" href="https://www.youtube.com/@thefakesydney" target="_blank" rel="noopener noreferrer">YouTube</a>
+    <a class="button-link" href="https://guns.lol/thefakesydney" target="_blank" rel="noopener noreferrer">guns.lol</a>
 
     <br><br>
-    <button onclick="location.replace('index.html')">Back to Auraa</button>
+    <button onclick="window.top.location.href='index.html'">Back to Auraa</button>
 
     <div class="footer">
-      &copy; 2025 Auraa | By thefakesydney
+      &copy; Auraa | By Quantum Services
     </div>
   </div>
 </body>
